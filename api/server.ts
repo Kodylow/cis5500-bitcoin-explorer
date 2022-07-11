@@ -2,6 +2,8 @@ import http from "http";
 import express, { Express } from "express";
 import morgan from "morgan";
 import routes from "./routes/blockheaders";
+import transactionHeaderRoutes from "./routes/transactionheaders";
+
 
 const router: Express = express();
 
@@ -27,6 +29,7 @@ router.use((req, res, next) => {
 });
 
 router.use("/", routes);
+router.use("/transactions", transactionHeaderRoutes);
 
 /** Error handling */
 router.use((req, res, next) => {
@@ -38,7 +41,7 @@ router.use((req, res, next) => {
 
 /** Server */
 const httpServer = http.createServer(router);
-const PORT: any = 5000;
+const PORT: any = 5010;
 httpServer.listen(PORT, () =>
   console.log(`The api server is running on port ${PORT}`)
 );
