@@ -13,8 +13,8 @@ interface txids {
   txid: String[];
 }
 
-// Create interface for transaction headers
-
+// Starter Skeleton for getting recent transactions
+// Needs to be fleshed out a bit more
 export const getRecentTxs = async (req: Request, res: Response, next: NextFunction) => {
   // Get latest blockheight
   // Replace this with a sql query
