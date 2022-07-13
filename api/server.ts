@@ -4,7 +4,6 @@ import morgan from "morgan";
 import routes from "./routes/blockheaders";
 import transactionHeaderRoutes from "./routes/transactionheaders";
 
-
 const router: Express = express();
 
 // morgan for logging

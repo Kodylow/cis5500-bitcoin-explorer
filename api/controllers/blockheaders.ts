@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import axios, { AxiosResponse } from "axios";
-
+import pool from '../database/db';
+import { QueryResult } from 'pg';
 
 // TODO: switch to BlockHeadersController
 
@@ -23,17 +24,37 @@ const getPosts = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-// getting a single post
-const getPost = async (req: Request, res: Response, next: NextFunction) => {
-  // get the post id from the req
-  let id: string = req.params.id;
-  // get the post
-  let result: AxiosResponse = await axios.get(
-    `https://jsonplaceholder.typicode.com/posts/${id}`
-  );
-  let post: Post = result.data;
+// getting a single block
+const getBlock = async (req: Request, res: Response, next: NextFunction) => {
+  // get the block hash from the req
+  let id: string = String(req.params.id);
+
+  // query to get blockheader data
+  const blockheader_query = `
+  SELECT
+    encode(hash, 'escape')::text AS hash
+    , height
+    , version
+    , encode(prev_hash, 'escape')::text AS prev_hash
+    , timestamp
+    , bits
+    , nonce
+    , size
+    , weight
+    , num_tx
+    , confirmations
+  FROM
+    bitcoin.blocks
+  WHERE
+    hash = '${id}'
+  `;
+
+  // get data for a specific block header
+  let pgResult: QueryResult<any> = await pool.query(blockheader_query);
+  let blockHeaderData: any[] = pgResult.rows;
+
   return res.status(200).json({
-    message: post,
+    message: blockHeaderData,
   });
 };
 
@@ -91,4 +112,4 @@ const addPost = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export default { getPosts, getPost, updatePost, deletePost, addPost };
+export default { getPosts, getBlock, updatePost, deletePost, addPost };

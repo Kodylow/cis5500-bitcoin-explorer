@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
     "esModuleInterop": true,
