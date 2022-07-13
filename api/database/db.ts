@@ -15,6 +15,4 @@ const pool = new pg.Pool({
   }
 });
 
-console.log(process.env.user);
-
 export default pool;
