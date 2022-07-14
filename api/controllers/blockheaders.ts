@@ -12,15 +12,68 @@ interface Post {
   body: String;
 }
 
-// getting all posts
-const getPosts = async (req: Request, res: Response, next: NextFunction) => {
-  // get some posts
-  let result: AxiosResponse = await axios.get(
-    `https://jsonplaceholder.typicode.com/posts`
-  );
-  let posts: [Post] = result.data;
+const currMaxBlock = async () => {
+  let maxblock_query = `
+    SELECT
+      MAX(height) as height
+    FROM
+      bitcoin.blocks
+  `
+  // get data for a specific block header
+  let pgResult: QueryResult<any> = await pool.query(maxblock_query);
+  let blockHeight: any[] = pgResult.rows;
+
+  return blockHeight;
+}
+
+const getMaxBlockHeight = async (req: Request, res: Response, next: NextFunction) => {
+  let maxCurrentBlockHeight: any[] = await currMaxBlock();
+
   return res.status(200).json({
-    message: posts,
+    message: maxCurrentBlockHeight,
+  });
+}
+
+// getting multiple blockheaders given a starting and ending block height
+const getBlocks = async (req: Request, res: Response, next: NextFunction) => {
+  // Set default hstart parameter
+  let maxCurrentBlockHeight: any[] = await currMaxBlock();
+  let sHeightDefault: number = Number(maxCurrentBlockHeight[0]['height']);
+
+  // query params
+  let hend = Number(req.query.hend) || sHeightDefault; // If no hend - use the current max block height
+  let hstart = Number(req.query.hstart) || hend - 25; // If no start - use hend - 25
+
+  // query to get all block headers ordered by height desc
+  // Using encode(hash, 'escape') allows to turn bytea:
+    // \\x30303030303030303030303030303030303030383438386361636339323863353635366431333263353632353130623734633934626136316235363236366566
+    // 00000000000000000008488cacc928c5656d132c562510b74c94ba61b56266ef
+  const blockheader_query = `
+    SELECT
+      encode(hash, 'escape')::text AS hash
+      , height
+      , version
+      , encode(prev_hash, 'escape')::text AS prev_hash
+      , timestamp
+      , bits
+      , nonce
+      , size
+      , weight
+      , num_tx
+      , confirmations
+    FROM
+      bitcoin.blocks
+    WHERE
+      height BETWEEN ${hstart} AND ${hend}
+    ORDER BY height DESC
+  `;
+
+  // get data for a specific block header
+  let pgResult: QueryResult<any> = await pool.query(blockheader_query);
+  let blockHeaders: any[] = pgResult.rows;
+
+  return res.status(200).json({
+    message: blockHeaders,
   });
 };
 
@@ -114,4 +167,4 @@ const addPost = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export default { getPosts, getBlock, updatePost, deletePost, addPost };
+export default { getBlocks, getMaxBlockHeight, getBlock, updatePost, deletePost, addPost };
