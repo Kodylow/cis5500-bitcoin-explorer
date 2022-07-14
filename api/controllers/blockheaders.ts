@@ -30,10 +30,9 @@ const getBlock = async (req: Request, res: Response, next: NextFunction) => {
   let id: string = String(req.params.id);
 
   // query to get blockheader data
-  // Placeholder database - this has the basic data that I parsed playing around with bitcoin blockchain data
-  // Talk with the team about creating a new database?
   const blockheader_query = `
   SELECT
+    # hash is stored as bytea, escape turns it into a string instead of getting the hash as raw bytes
     encode(hash, 'escape')::text AS hash
     , height
     , version
