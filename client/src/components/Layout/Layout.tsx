@@ -1,21 +1,13 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import Navbar from "../NavBar";
 
 export interface ILayoutComponentProps {}
 
 const LayoutComponent: React.FC<ILayoutComponentProps> = (props) => {
   return (
-    <div
-      style={{
-        border: 2,
-        padding: 2,
-        borderColor: "black",
-        borderStyle: "dashed",
-        margin: 5,
-        width: 500,
-        height: 500,
-      }}
-    >
+    <div>
+      <Navbar />
       <Outlet />
     </div>
   );
