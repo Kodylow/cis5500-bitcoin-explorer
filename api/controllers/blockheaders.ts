@@ -33,11 +33,11 @@ const getBlock = async (req: Request, res: Response, next: NextFunction) => {
   const blockheader_query = `
   SELECT
     /*  hash is stored as bytea, escape turns it into a string instead of getting the hash as raw bytes */
-    encode(hash, 'escape')::text AS hash
+    hash::text AS hash
     , height
     , version
     /*  hash is stored as bytea, escape turns it into a string instead of getting the hash as raw bytes */
-    , encode(prev_hash, 'escape')::text AS prev_hash
+    , hash::text AS prev_hash
     , timestamp
     , bits
     , nonce
