@@ -1,23 +1,29 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LayoutComponent from "./components/Layout";
-import AboutPage from "./pages/AboutPage";
+import Layout from "./components/Layout/Layout";
 import HomePage from "./pages/HomePage";
+import { CssBaseline } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
+import theme from "./components/Layout/theme";
+import BlocksPage from "./pages/BlocksPage";
+import UTXOsPage from "./pages/UTXOsPage";
 
 export interface IAppProps {}
 
 const App: React.FC<IAppProps> = (props) => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about"></Route>
-        <Route path="/layout" element={<LayoutComponent />}>
-          <Route index element={<AboutPage />} />
-          <Route path=":number" element={<AboutPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="/UTXOs" element={<UTXOsPage />} />
+            <Route path="/blocks" element={<BlocksPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 
