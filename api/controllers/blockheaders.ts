@@ -121,6 +121,22 @@ const getBlock = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
+// getting a single block
+const getBlockTxs = async (req: Request, res: Response, next: NextFunction) => {
+  // get the block hash from the req
+  let id: string = String(req.params.id);
+
+  // query to get blockheader data
+  let txidsResponse: AxiosResponse = await axios.get(
+    `https://blockstream.info/api/block/${id}/txids`
+  );
+  let txids: any = txidsResponse.data;
+
+  return res.status(200).json({
+    message: txids,
+  });
+};
+
 // updating a post
 const updatePost = async (req: Request, res: Response, next: NextFunction) => {
   // get the post id from the req.params
@@ -175,4 +191,4 @@ const addPost = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export default { getBlocks, getMaxBlockHeight, getBlock, updatePost, deletePost, addPost };
+export default { getBlocks, getMaxBlockHeight, getBlock, getBlockTxs };
