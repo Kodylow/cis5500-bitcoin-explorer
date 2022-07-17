@@ -2,7 +2,9 @@ import http from "http";
 import express, { Express } from "express";
 import morgan from "morgan";
 import routes from "./routes/blockheaders";
-import transactionHeaderRoutes from "./routes/transactionheaders";
+import transactionHeaderRouter from "./routes/transactionheaders";
+import addressRouter from "./routes/address";
+
 
 const router: Express = express();
 
@@ -28,7 +30,8 @@ router.use((req, res, next) => {
 });
 
 router.use("/", routes);
-router.use("/transactions", transactionHeaderRoutes);
+router.use("/transactions", transactionHeaderRouter);
+router.use("/address", addressRouter);
 
 /** Error handling */
 router.use((req, res, next) => {
