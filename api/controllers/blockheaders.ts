@@ -5,20 +5,13 @@ import { QueryResult } from 'pg';
 
 // TODO: switch to BlockHeadersController
 
-interface Post {
-  userId: Number;
-  id: Number;
-  title: String;
-  body: String;
-}
-
 // helper function that returns maximum height of bitcoin blockchain (used in couple controllers)
 const currMaxBlock = async () => {
   let maxblock_query = `
     SELECT
       MAX(height) as height
     FROM
-      bitcoin.blocks
+      bitcoin.block_headers
   `
   // get data for a specific block header
   let pgResult: QueryResult<any> = await pool.query(maxblock_query);
@@ -37,28 +30,35 @@ const getMaxBlockHeight = async (req: Request, res: Response, next: NextFunction
 }
 
 // getting multiple blockheaders given a starting and ending block height
+// Providing only hstart will give the next 25 blocks from hstart
+// Providing only hend will give the prev 25 blocks from hend
 const getBlocks = async (req: Request, res: Response, next: NextFunction) => {
   // Set default hstart parameter
   let maxCurrentBlockHeight: any[] = await currMaxBlock();
   let sHeightDefault: number = Number(maxCurrentBlockHeight[0]['height']);
 
   // Set query params
-  let hend = Number(req.query.hend) || sHeightDefault; // If no hend - use the current max block height
-  let hstart = Number(req.query.hstart) || hend - 25; // If no start - use hend - 25
+  let hend = Number(req.query.hend); // If no hend - use the current max block height
+  let hstart = Number(req.query.hstart);
+
+  // To avoid pull hundreds of thousands of blocks if start begins at 0 with no hend query parameter
+  if (Number.isInteger(hstart) && Number.isNaN(hend)) {
+    hend = hstart + 25;
+  } else if (Number.isNaN(hend) && Number.isNaN(hstart)) {
+    hend = sHeightDefault;
+  }
+
+  if (Number.isNaN(hstart)) {
+    hstart = hend - 25;
+  };
 
   // query to get all block headers ordered by height desc
-  // Using encode(hash, 'escape') allows to turn bytea into text:
-    // \\x30303030303030303030303030303030303030383438386361636339323863353635366431333263353632353130623734633934626136316235363236366566
-    // 00000000000000000008488cacc928c5656d132c562510b74c94ba61b56266ef
-  // However, depending on how we are storing hash - this may not be needed
   const blockheader_query = `
     SELECT
-      /*  hash is stored as bytea, escape turns it into a string instead of getting the hash as raw bytes */
-      encode(hash, 'escape')::text AS hash
+      hash AS hash
       , height
       , version
-      /*  hash is stored as bytea, escape turns it into a string instead of getting the hash as raw bytes */
-      , encode(prev_hash, 'escape')::text AS prev_hash
+      , prev_block_hash AS prev_hash
       , timestamp
       , bits
       , nonce
@@ -67,7 +67,7 @@ const getBlocks = async (req: Request, res: Response, next: NextFunction) => {
       , num_tx
       , confirmations
     FROM
-      bitcoin.blocks
+      bitcoin.block_headers
     WHERE
       height BETWEEN ${hstart} AND ${hend}
     ORDER BY height DESC
@@ -88,17 +88,12 @@ const getBlock = async (req: Request, res: Response, next: NextFunction) => {
   let id: string = String(req.params.id);
 
   // query to get blockheader data
-  // using encode(hash, 'escape') allows to turn bytea into text:
-    // \\x30303030303030303030303030303030303030383438386361636339323863353635366431333263353632353130623734633934626136316235363236366566
-    // 00000000000000000008488cacc928c5656d132c562510b74c94ba61b56266ef
   const blockheader_query = `
   SELECT
-    /*  hash is stored as bytea, escape turns it into a string instead of getting the hash as raw bytes */
-    encode(hash, 'escape')::text AS hash
+    hash AS hash
     , height
     , version
-    /*  hash is stored as bytea, escape turns it into a string instead of getting the hash as raw bytes */
-    , encode(prev_hash, 'escape')::text AS prev_hash
+    , prev_block_hash AS prev_hash
     , timestamp
     , bits
     , nonce
@@ -107,7 +102,7 @@ const getBlock = async (req: Request, res: Response, next: NextFunction) => {
     , num_tx
     , confirmations
   FROM
-    bitcoin.blocks
+    bitcoin.block_headers
   WHERE
     hash = '${id}'
   `;
@@ -137,58 +132,5 @@ const getBlockTxs = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-// updating a post
-const updatePost = async (req: Request, res: Response, next: NextFunction) => {
-  // get the post id from the req.params
-  let id: string = req.params.id;
-  // get the data from req.body
-  let title: string = req.body.title ?? null;
-  let body: string = req.body.body ?? null;
-  // update the post
-  let response: AxiosResponse = await axios.put(
-    `https://jsonplaceholder.typicode.com/posts/${id}`,
-    {
-      ...(title && { title }),
-      ...(body && { body }),
-    }
-  );
-  // return response
-  return res.status(200).json({
-    message: response.data,
-  });
-};
-
-// deleting a post
-const deletePost = async (req: Request, res: Response, next: NextFunction) => {
-  // get the post id from req.params
-  let id: string = req.params.id;
-  // delete the post
-  let response: AxiosResponse = await axios.delete(
-    `https://jsonplaceholder.typicode.com/posts/${id}`
-  );
-  // return response
-  return res.status(200).json({
-    message: "post deleted successfully",
-  });
-};
-
-// adding a post
-const addPost = async (req: Request, res: Response, next: NextFunction) => {
-  // get the data from req.body
-  let title: string = req.body.title;
-  let body: string = req.body.body;
-  // add the post
-  let response: AxiosResponse = await axios.post(
-    `https://jsonplaceholder.typicode.com/posts`,
-    {
-      title,
-      body,
-    }
-  );
-  // return response
-  return res.status(200).json({
-    message: response.data,
-  });
-};
 
 export default { getBlocks, getMaxBlockHeight, getBlock, getBlockTxs };

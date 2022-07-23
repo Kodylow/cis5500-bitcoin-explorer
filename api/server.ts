@@ -4,7 +4,7 @@ import morgan from "morgan";
 import routes from "./routes/blockheaders";
 import transactionHeaderRouter from "./routes/transactionheaders";
 import addressRouter from "./routes/address";
-
+import coinbaseTxsRouter from './routes/coinbasetxs';
 
 const router: Express = express();
 
@@ -32,6 +32,8 @@ router.use((req, res, next) => {
 router.use("/", routes);
 router.use("/transactions", transactionHeaderRouter);
 router.use("/address", addressRouter);
+router.use("/coinbasetxs", coinbaseTxsRouter);
+
 
 /** Error handling */
 router.use((req, res, next) => {

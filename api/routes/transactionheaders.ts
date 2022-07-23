@@ -4,6 +4,9 @@ import transactionHeadersController from '../controllers/transactionheaders';
 const router = express.Router();
 
 
-router.get('/', transactionHeadersController.getRecentTxs);
+router.get('/', transactionHeadersController.getTxs);
+router.get('/:id', transactionHeadersController.getTxDetails);
+
+
 
 export = router;
