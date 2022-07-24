@@ -56,10 +56,12 @@ const bfsTxs = async (startTxId: String) => {
   const queue = [startTxId];
   let result = [];
   let timeout = true;
+  let sentToExchange = 'No';
 
   // Set time out to 30 seconds
   setTimeout( () => {
     timeout = false
+    sentToExchange = 'Unknown';
   }, 30000);
 
   while (queue.length > 0 && timeout) {
@@ -73,6 +75,7 @@ const bfsTxs = async (startTxId: String) => {
       let addresses = await getTxOutAddresses(nextTx as String);
       for (let address of addresses) {
         if (exchangeAddresses.includes(address)) {
+          sentToExchange = 'Yes';
           console.log(`This is an exchange transaction: ${tx} and address ${address}`);
         };
       }
@@ -84,7 +87,7 @@ const bfsTxs = async (startTxId: String) => {
       }
     }
   }
-  return result;
+  return {result, sentToExchange};
 }
 
 export default {

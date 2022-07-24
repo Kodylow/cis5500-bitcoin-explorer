@@ -22,6 +22,8 @@ export const getTracedTxs = async (req: Request, res: Response, next: NextFuncti
   })
 };
 
+// To do later - add a router and controller for whether a transaction was part of an exchange or unknown (i.e. timed out)
+
 export default {
   getTracedTxs
 };
