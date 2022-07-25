@@ -1,5 +1,5 @@
 import express from 'express';
-import traceTransactionsController from '../controllers/tracetransactions';
+import traceTransactionsController from '../controllers/utxos';
 
 const router = express.Router();
 

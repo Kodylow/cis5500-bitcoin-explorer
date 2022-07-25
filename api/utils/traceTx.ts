@@ -4,93 +4,76 @@ import getTxDetails from './getTxDetails';
 // Hardcoded example addresses for testing purposes
 const exchangeAddresses = ['1KFHE7w8BhaENAswwryaoccDb6qcT6DbYY']
 
-const getTxOutAddresses = async (txid: String) => {
-  let txDetail = await getTxDetails(txid);
-  let addresses = [];
 
-  for (let address of txDetail['vout']) {
-    if (address['scriptpubkey_address']) addresses.push(address['scriptpubkey_address']);
-  }
+/*
 
-  return addresses;
-}
+Given a vout (txid + index vout) - initial load:
 
-const findNextTxsInAddress = async (txid: String, address: String) => {
-  let nextTxs = new Set();
-  let addressDetailResponse: AxiosResponse = await axios.get(
-    `https://blockstream.info/api/address/${address}/txs`
-  );
-  let addressTxs = addressDetailResponse.data;
+1. Return all vins involved in that txid
 
-  for (let tx of addressTxs) {
-    let txDetail = await getTxDetails(tx['txid']);
-    let vins = txDetail['vin']
 
-    for (let vin of vins) {
-      if (vin['txid'] === txid) {
-        nextTxs.add(tx['txid']);
-      }
+Given a list of vouts:
+
+1. For each vout, return a list of vins
+2. Inside each vin - check if this transaction was involved in an address that was in known_addresses
+
+*/
+
+// Test: http://localhost:5010/utxos/c3322d6cf29ffbf96908467bd22cc147d8a6a2949710f07f0c27da91b153954f:0
+const getUtxoDetail = async (utxo: String) => {
+  let txid = utxo.split(':')[0];
+  let txidVout = Number(utxo.split(':')[1]);
+  let txData = await getTxDetails(txid);
+  let vouts = txData['vout'];
+  let results;
+
+  // console.log(txData);
+
+  for (let idx = 0; idx < vouts.length; idx += 1) {
+    if (idx === txidVout) {
+      results = vouts[idx];
     }
   }
 
-  return Array.from(nextTxs);
+  return results;
 }
 
-const getNextTxs = async (txid: String) => {
-  let addresses = await getTxOutAddresses(txid);
-  let nextTxs = [];
+const getVinsDetail = async (utxo: String) => {
+  let txid = utxo.split(':')[0];
+  console.log(txid);
+  let txData = await getTxDetails(txid);
+  let vins = txData['vin'];
+  let results = [];
 
-  for (let address of addresses) {
-    let txs = await findNextTxsInAddress(txid, address)
-    for (let tx of txs) {
-      nextTxs.push(tx);
-    }
+  console.log(txData);
+
+  for (let vin of vins) {
+    results.push(vin);
   }
 
-  return nextTxs;
+  return results;
 }
 
-// get all transactions
-const bfsTxs = async (startTxId: String) => {
-  const visited = new Set();
-  const queue = [startTxId];
-  let result = [];
-  let timeout = true;
-  let sentToExchange = 'No';
+const getUtxo = async (utxo: String) => {
+  let results;
+  let utxoData = await getUtxoDetail(utxo);
+  let vinsData = await getVinsDetail(utxo);
+  results = { utxoData, vinsData }
+  return results;
+}
 
-  // Set time out to 30 seconds
-  setTimeout( () => {
-    timeout = false
-    sentToExchange = 'Unknown';
-  }, 30000);
+const getUtxos = async (utxos: String[]) => {
+  let results = [];
 
-  while (queue.length > 0 && timeout) {
-    const tx: String = queue.shift()!;
-
-    // Get next transactions
-    let nextTxs = await getNextTxs(tx);
-    result.push({startTx: tx, nextTxs: nextTxs});
-    for (const nextTx of nextTxs) {
-      // If we matched to an address of an exchange break
-      let addresses = await getTxOutAddresses(nextTx as String);
-      for (let address of addresses) {
-        if (exchangeAddresses.includes(address)) {
-          sentToExchange = 'Yes';
-          console.log(`This is an exchange transaction: ${tx} and address ${address}`);
-        };
-      }
-
-      // If we haven't visted the transaction add to the queue
-      if (!visited.has(nextTx)) {
-        visited.add(nextTx);
-        queue.push(nextTx as String);
-      }
-    }
+  for (let utxo of utxos) {
+    let utxoData = await getUtxo(utxo);
+    results.push(utxoData);
   }
-  return {result, sentToExchange};
+
+  return results
 }
 
 export default {
-  getNextTxs,
-  bfsTxs
+  getUtxo,
+  getUtxos
 }
