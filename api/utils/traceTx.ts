@@ -19,15 +19,18 @@ Given a list of vouts:
 
 */
 
-// Test: http://localhost:5010/utxos/c3322d6cf29ffbf96908467bd22cc147d8a6a2949710f07f0c27da91b153954f:0
+interface Result {
+  utxo: String
+  utxoData: Object,
+  vins: Object
+}
+
 const getUtxoDetail = async (utxo: String) => {
   let txid = utxo.split(':')[0];
   let txidVout = Number(utxo.split(':')[1]);
   let txData = await getTxDetails(txid);
   let vouts = txData['vout'];
   let results;
-
-  // console.log(txData);
 
   for (let idx = 0; idx < vouts.length; idx += 1) {
     if (idx === txidVout) {
@@ -40,12 +43,9 @@ const getUtxoDetail = async (utxo: String) => {
 
 const getVinsDetail = async (utxo: String) => {
   let txid = utxo.split(':')[0];
-  console.log(txid);
   let txData = await getTxDetails(txid);
   let vins = txData['vin'];
   let results = [];
-
-  console.log(txData);
 
   for (let vin of vins) {
     results.push(vin);
@@ -55,10 +55,9 @@ const getVinsDetail = async (utxo: String) => {
 }
 
 const getUtxo = async (utxo: String) => {
-  let results;
   let utxoData = await getUtxoDetail(utxo);
   let vinsData = await getVinsDetail(utxo);
-  results = { utxoData, vinsData }
+  let results: Result = { utxo: utxo , utxoData: utxoData, vins: vinsData };
   return results;
 }
 
@@ -66,7 +65,7 @@ const getUtxos = async (utxos: String[]) => {
   let results = [];
 
   for (let utxo of utxos) {
-    let utxoData = await getUtxo(utxo);
+    let utxoData : Result = await getUtxo(utxo);
     results.push(utxoData);
   }
 

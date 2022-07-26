@@ -3,6 +3,8 @@ import axios, { AxiosResponse } from "axios";
 import pool from '../database/db';
 import { QueryResult } from 'pg';
 import isValidHeight from '../utils/isValidHeight';
+import getTxDetails from '../utils/getTxDetails';
+
 
 interface txids {
   txid: String[];
@@ -41,8 +43,6 @@ export const getTxs = async (req: Request, res: Response, next: NextFunction) =>
     let blockHashRes: any[] = pgResult.rows;
     let blockHash = blockHashRes[0]['hash'];
 
-    // Create a logic for handling when height given is not a valid block height
-
     // Get txids for the block
     let txidsResponse: AxiosResponse = await axios.get(
       `https://blockstream.info/api/block/${blockHash}/txids`
@@ -58,14 +58,9 @@ export const getTxs = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 // Get detailed vin and vout for a specific transaction id
-export const getTxDetails = async (req: Request, res: Response, next: NextFunction) => {
+export const getTxDetailsByTxID = async (req: Request, res: Response, next: NextFunction) => {
   let id: string = String(req.params.id);
-
-  // query to get blockheader data
-  let txDetailResponse: AxiosResponse = await axios.get(
-    `https://blockstream.info/api/tx/${id}`
-  );
-  let txDetail: any = txDetailResponse.data;
+  let txDetail: any = await getTxDetails(id);
 
   return res.status(200).json({
     message: txDetail
@@ -74,5 +69,5 @@ export const getTxDetails = async (req: Request, res: Response, next: NextFuncti
 
 export default {
   getTxs,
-  getTxDetails
+  getTxDetailsByTxID
 };

@@ -7,5 +7,4 @@ const router = express.Router();
 router.get('/:id', traceTransactionsController.getTracedTxs);
 
 
-
 export = router;
