@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 router.get('/', transactionHeadersController.getTxs);
-router.get('/:id', transactionHeadersController.getTxDetails);
+router.get('/:id', transactionHeadersController.getTxDetailsByTxID);
 
 
 

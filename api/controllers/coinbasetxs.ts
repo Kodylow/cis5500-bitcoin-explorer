@@ -19,7 +19,7 @@ export const getCoinbaseTxs = async (
   let hend = Number(req.query.hend); // If no hend - use the current max block height
   let hstart = Number(req.query.hstart);
 
-  // To avoid pull hundreds of thousands of blocks if start begins at 0 with no hend query parameter
+  // To avoid pulling hundreds of thousands of coinbase txs if start begins at 0 with no hend query parameter
   if (Number.isInteger(hstart) && Number.isNaN(hend)) {
     hend = hstart + 25;
   } else if (Number.isNaN(hend) && Number.isNaN(hstart)) {
@@ -46,7 +46,7 @@ export const getCoinbaseTxs = async (
       bh.height BETWEEN ${hstart} AND ${hend}
     ORDER BY bh.height DESC
   `;
-
+  
   console.log(coinbase_query);
 
   // get data for a specific block header
@@ -67,7 +67,7 @@ const getCoinbaseTx = async (
   // get the block hash from the req
   let id: string = String(req.params.id);
 
-  // query to get blockheader data
+  // query to get specific coinbase tx by txid
   const coinbase_query = `
     SELECT
       ct.*
@@ -77,11 +77,9 @@ const getCoinbaseTx = async (
       txid = '${id}'
   `;
 
-  // get data for a specific block header
+  // get data for a specific coinbase tx
   let pgResult: QueryResult<any> = await pool.query(coinbase_query);
   let coinbaseData: any[] = pgResult.rows;
-
-  console.log(coinbaseData);
 
   return res.status(200).json({
     message: coinbaseData,
