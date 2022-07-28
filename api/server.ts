@@ -4,9 +4,8 @@ import morgan from "morgan";
 import routes from "./routes/blockheaders";
 import transactionHeaderRouter from "./routes/transactionheaders";
 import addressRouter from "./routes/address";
-import coinbaseTxsRouter from './routes/coinbasetxs';
-import traceTxsRouter from './routes/utxos';
-
+import coinbaseTxsRouter from "./routes/coinbasetxs";
+import traceTxsRouter from "./routes/utxos";
 
 const router: Express = express();
 
@@ -25,7 +24,7 @@ router.use((req, res, next) => {
     "origin, X-Requested-With,Content-Type,Accept, Authorization"
   );
   if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "GET PATCH DELETE POST");
+    res.header("Access-Control-Allow-Methods", "GET");
     return res.status(200).json({});
   }
   next();
@@ -36,7 +35,6 @@ router.use("/transactions", transactionHeaderRouter);
 router.use("/address", addressRouter);
 router.use("/coinbasetxs", coinbaseTxsRouter);
 router.use("/utxos", traceTxsRouter);
-
 
 /** Error handling */
 router.use((req, res, next) => {

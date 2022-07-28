@@ -6,7 +6,7 @@ export interface ILayoutComponentProps {}
 
 const LayoutComponent: React.FC<ILayoutComponentProps> = (props) => {
   return (
-    <div>
+    <div style={{ maxHeight: "100vh" }}>
       <Navbar />
       <Outlet />
     </div>
