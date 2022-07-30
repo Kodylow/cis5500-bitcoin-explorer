@@ -1,35 +1,38 @@
 import { List, ListItem, Typography } from "@mui/material";
 import React from "react";
-import { Transaction } from "./BlocksTypes";
 
 export interface IProps {
-  transactions: Array<Transaction>;
+  txids: Array<string>;
+  page: number;
 }
 
-const BlockTxsComponent: React.FC<IProps> = ({ transactions }) => {
+const BlockTxsComponent: React.FC<IProps> = ({ txids, page }) => {
   return (
-    <List
-      sx={{
-        height: "87vh",
-        maxWidth: 360,
-        bgcolor: "background.paper",
-        overflow: "auto",
-      }}
-    >
-      {transactions ? (
-        <div>
-          {transactions.map((transaction) => (
-            <ListItem onClick={() => {}} key={transaction.txid}>
-              transaction.txid
-            </ListItem>
-          ))}
-        </div>
+    <div>
+      {txids.length ? (
+        <List
+          sx={{
+            height: "50vh",
+            bgcolor: "background.paper",
+            overflow: "auto",
+          }}
+        >
+          {txids.map((txid, index) => {
+            return (
+              <ListItem key={txid}>
+                <Typography>
+                  {index + (page - 1) * 25} : {txid}
+                </Typography>
+              </ListItem>
+            );
+          })}
+        </List>
       ) : (
         <Typography variant="body1" align="center">
-          Loading...
+          none
         </Typography>
       )}
-    </List>
+    </div>
   );
 };
 

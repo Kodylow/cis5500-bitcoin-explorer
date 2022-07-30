@@ -11,17 +11,16 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import BlocksListComponent from "./BlocksListComponent";
-import { BlockHeader, Transaction } from "./BlocksTypes";
+import { BlockHeader } from "./BlocksTypes";
 import BlockTxsComponent from "./BlockTxsComponent";
+import BlockHeaderInfoComponent from "./BlockHeaderInfoComponent";
 export interface IBlocksPageProps {}
 
 const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   const [block, setBlock] = React.useState<BlockHeader | null>(null);
   const [page, setPage] = React.useState(1);
-  const [pageTXs, setPageTXs] = React.useState<Array<Transaction>>([]);
-  const [transactions, setTransactions] = React.useState<Array<Transaction>>(
-    []
-  );
+  const [pageTXs, setPageTXs] = React.useState<Array<string>>([]);
+  const [txids, setTxids] = React.useState<Array<string>>([]);
 
   React.useEffect(() => {
     if (block !== null) {
@@ -33,12 +32,11 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         let res = await fetch(url);
         let data = await res.json();
         console.log(data);
-        setTransactions([...data.message]);
-
+        setTxids([...data.message]);
         setPageTXs([...data.message.slice(0, 25)]);
       })();
     } else {
-      setTransactions([]);
+      setTxids([]);
     }
   }, [block]);
 
@@ -68,28 +66,20 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         <Typography variant="h3" align="center">
           Block: {block ? block.height : "none"}
         </Typography>
-        <Card sx={{ m: 2 }}>
-          <CardContent>
-            <Typography variant="h5">Block Header Info</Typography>
-            {block ? (
-              <Typography variant="body1" key={block.hash}>
-                {JSON.stringify(block, null, 2)}
-              </Typography>
-            ) : (
-              <div>: none</div>
-            )}
-          </CardContent>
-        </Card>
+        <BlockHeaderInfoComponent block={block} />
         <Card sx={{ m: 2 }}>
           <CardContent>
             <Typography variant="h5">Transactions in Block</Typography>
             <Pagination
-              count={10}
+              count={Math.ceil(txids.length / 25)}
               color="primary"
               page={page}
-              onChange={(event, value) => setPage(value)}
+              onChange={(event, value) => {
+                setPage(value);
+                setPageTXs([...txids.slice((value - 1) * 25, value * 25)]);
+              }}
             />
-            <BlockTxsComponent transactions={pageTXs} />
+            <BlockTxsComponent txids={pageTXs} page={page} />
           </CardContent>
         </Card>
       </Grid>
