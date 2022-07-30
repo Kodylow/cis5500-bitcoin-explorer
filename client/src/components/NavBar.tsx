@@ -29,7 +29,7 @@ const Navbar: FC = (): ReactElement => {
       sx={{
         width: "100%",
         height: "auto",
-        backgroundColor: "secondary.main",
+        backgroundColor: "primary.main",
       }}
     >
       <Container maxWidth="xl">
@@ -89,14 +89,6 @@ const Navbar: FC = (): ReactElement => {
               ))}
             </Menu>
           </Box>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-          >
-            React Starter App
-          </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Box
               sx={{

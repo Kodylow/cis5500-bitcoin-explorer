@@ -1,7 +1,8 @@
 // pages
 import HomePage from "../pages/HomePage";
-import BlocksPage from "../pages/BlocksPage";
-import UTXOsPage from "../pages/UTXOsPage";
+import BlocksPage from "../pages/BlocksPage/BlocksPage";
+import UTXOsPage from "../pages/UTXOsPage/UTXOsPage";
+import TXIDsPage from "../pages/TXIDsPage/TXIDsPage";
 // other
 import { FC } from "react";
 
@@ -35,5 +36,12 @@ export const routes: Array<Route> = [
     path: "/utxos",
     enabled: true,
     component: UTXOsPage,
+  },
+  {
+    key: "txids-route",
+    title: "TXIDs",
+    path: "/txids",
+    enabled: true,
+    component: TXIDsPage,
   },
 ];

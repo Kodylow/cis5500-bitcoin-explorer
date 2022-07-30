@@ -2,13 +2,18 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import HomePage from "./pages/HomePage";
-import { CssBaseline } from "@material-ui/core";
-import { ThemeProvider } from "@material-ui/styles";
-import theme from "./components/Layout/theme";
-import BlocksPage from "./pages/BlocksPage";
-import UTXOsPage from "./pages/UTXOsPage";
-
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import BlocksPage from "./pages/BlocksPage/BlocksPage";
+import UTXOsPage from "./pages/UTXOsPage/UTXOsPage";
+import TXIDsPage from "./pages/TXIDsPage/TXIDsPage";
+import { CssBaseline } from "@mui/material";
 export interface IAppProps {}
+
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 const App: React.FC<IAppProps> = (props) => {
   return (
@@ -20,6 +25,7 @@ const App: React.FC<IAppProps> = (props) => {
             <Route index element={<HomePage />} />
             <Route path="/UTXOs" element={<UTXOsPage />} />
             <Route path="/blocks" element={<BlocksPage />} />
+            <Route path="/txids" element={<TXIDsPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
