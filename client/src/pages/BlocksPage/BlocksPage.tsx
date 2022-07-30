@@ -4,6 +4,7 @@ import {
   Grid,
   IconButton,
   InputBase,
+  Pagination,
   Paper,
   Typography,
 } from "@mui/material";
@@ -16,6 +17,7 @@ export interface IBlocksPageProps {}
 
 const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   const [block, setBlock] = React.useState<BlockHeader | null>(null);
+  const [page, setPage] = React.useState(1);
   const [transactions, setTransactions] = React.useState<Array<Transaction>>(
     []
   );
@@ -25,18 +27,19 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
       (async () => {
         console.log(block.hash);
         // check with David, not sure why this isn't
-        const url = `http://www.localhost:5010/transactions/${block.height}/txs`;
+        const url = `http://www.localhost:5010/blockheaders/${block.hash}/txs`;
         console.log(url);
         let res = await fetch(url);
         let data = await res.json();
-        setTransactions([...data]);
+        console.log(data);
+        setTransactions([...data.message]);
       })();
     } else {
       setTransactions([]);
     }
   }, [block]);
   return (
-    <Grid container spacing={0}>
+    <Grid container spacing={1}>
       <Grid item xs={2}>
         <Paper
           component="form"
@@ -76,6 +79,7 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         <Card sx={{ m: 2 }}>
           <CardContent>
             <Typography variant="h5">Transactions in Block</Typography>
+            <Pagination count={10} color="primary" page={page} />
             {transactions !== null ? (
               transactions.map((transaction) => (
                 <Typography variant="body1" key={transaction.txid}>
