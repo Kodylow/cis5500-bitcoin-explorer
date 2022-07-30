@@ -12,12 +12,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import BlocksListComponent from "./BlocksListComponent";
 import { BlockHeader, Transaction } from "./BlocksTypes";
-
+import BlockTxsComponent from "./BlockTxsComponent";
 export interface IBlocksPageProps {}
 
 const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   const [block, setBlock] = React.useState<BlockHeader | null>(null);
   const [page, setPage] = React.useState(1);
+  const [pageTXs, setPageTXs] = React.useState<Array<Transaction>>([]);
   const [transactions, setTransactions] = React.useState<Array<Transaction>>(
     []
   );
@@ -33,11 +34,14 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         let data = await res.json();
         console.log(data);
         setTransactions([...data.message]);
+
+        setPageTXs([...data.message.slice(0, 25)]);
       })();
     } else {
       setTransactions([]);
     }
   }, [block]);
+
   return (
     <Grid container spacing={1}>
       <Grid item xs={2}>
@@ -72,23 +76,20 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
                 {JSON.stringify(block, null, 2)}
               </Typography>
             ) : (
-              <div></div>
+              <div>: none</div>
             )}
           </CardContent>
         </Card>
         <Card sx={{ m: 2 }}>
           <CardContent>
             <Typography variant="h5">Transactions in Block</Typography>
-            <Pagination count={10} color="primary" page={page} />
-            {transactions !== null ? (
-              transactions.map((transaction) => (
-                <Typography variant="body1" key={transaction.txid}>
-                  {JSON.stringify(transaction, null, 2)}
-                </Typography>
-              ))
-            ) : (
-              <div></div>
-            )}
+            <Pagination
+              count={10}
+              color="primary"
+              page={page}
+              onChange={(event, value) => setPage(value)}
+            />
+            <BlockTxsComponent transactions={pageTXs} />
           </CardContent>
         </Card>
       </Grid>

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import axios, { AxiosResponse } from "axios";
-import pool from '../database/db';
-import { QueryResult } from 'pg';
+import pool from "../database/db";
+import { QueryResult } from "pg";
 
 // TODO: switch to BlockHeadersController
 
@@ -12,22 +12,26 @@ const currMaxBlock = async () => {
       MAX(height) as height
     FROM
       bitcoin.block_headers
-  `
+  `;
   // get data for a specific block header
   let pgResult: QueryResult<any> = await pool.query(maxblock_query);
   let blockHeight: any[] = pgResult.rows;
 
   return blockHeight;
-}
+};
 
 // get maximum block height of bitcoin blockchain
-const getMaxBlockHeight = async (req: Request, res: Response, next: NextFunction) => {
+const getMaxBlockHeight = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let maxCurrentBlockHeight: any[] = await currMaxBlock();
 
   return res.status(200).json({
     message: maxCurrentBlockHeight,
   });
-}
+};
 
 // getting multiple blockheaders given a starting and ending block height
 // Providing only hstart will give the next 25 blocks from hstart
@@ -35,7 +39,7 @@ const getMaxBlockHeight = async (req: Request, res: Response, next: NextFunction
 const getBlocks = async (req: Request, res: Response, next: NextFunction) => {
   // Set default hstart parameter
   let maxCurrentBlockHeight: any[] = await currMaxBlock();
-  let sHeightDefault: number = Number(maxCurrentBlockHeight[0]['height']);
+  let sHeightDefault: number = Number(maxCurrentBlockHeight[0]["height"]);
 
   // Set query params
   let hend = Number(req.query.hend); // If no hend - use the current max block height
@@ -50,7 +54,7 @@ const getBlocks = async (req: Request, res: Response, next: NextFunction) => {
 
   if (Number.isNaN(hstart)) {
     hstart = hend - 25;
-  };
+  }
 
   // query to get all block headers ordered by height desc
   const blockheader_query = `
@@ -59,12 +63,15 @@ const getBlocks = async (req: Request, res: Response, next: NextFunction) => {
       , height
       , version
       , prev_block_hash AS prev_hash
+      , merkle_root
       , timestamp
+      , median_time
       , bits
       , nonce
       , size
       , weight
       , num_tx
+      , difficulty
       , confirmations
     FROM
       bitcoin.block_headers
@@ -131,6 +138,5 @@ const getBlockTxs = async (req: Request, res: Response, next: NextFunction) => {
     message: txids,
   });
 };
-
 
 export default { getBlocks, getMaxBlockHeight, getBlock, getBlockTxs };
