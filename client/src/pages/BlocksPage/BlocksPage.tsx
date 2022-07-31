@@ -4,39 +4,44 @@ import {
   Grid,
   IconButton,
   InputBase,
+  Pagination,
   Paper,
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import BlocksListComponent from "./BlocksListComponent";
-import { BlockHeader, Transaction } from "./BlocksTypes";
-
+import { BlockHeader } from "./BlocksTypes";
+import BlockTxsComponent from "./BlockTxsComponent";
+import BlockHeaderInfoComponent from "./BlockHeaderInfoComponent";
 export interface IBlocksPageProps {}
 
 const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   const [block, setBlock] = React.useState<BlockHeader | null>(null);
-  const [transactions, setTransactions] = React.useState<Array<Transaction>>(
-    []
-  );
+  const [page, setPage] = React.useState(1);
+  const [pageTXs, setPageTXs] = React.useState<Array<string>>([]);
+  const [txids, setTxids] = React.useState<Array<string>>([]);
 
   React.useEffect(() => {
     if (block !== null) {
       (async () => {
         console.log(block.hash);
         // check with David, not sure why this isn't
-        const url = `http://www.localhost:5010/transactions/${block.height}/txs`;
+        const url = `http://www.localhost:5010/blockheaders/${block.hash}/txs`;
         console.log(url);
         let res = await fetch(url);
         let data = await res.json();
-        setTransactions([...data]);
+        console.log(data);
+        setTxids([...data.message]);
+        setPageTXs([...data.message.slice(0, 25)]);
       })();
     } else {
-      setTransactions([]);
+      setTxids([]);
     }
   }, [block]);
+
   return (
-    <Grid container spacing={0}>
+    <Grid container spacing={1}>
       <Grid item xs={2}>
         <Paper
           component="form"
@@ -61,30 +66,20 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         <Typography variant="h3" align="center">
           Block: {block ? block.height : "none"}
         </Typography>
-        <Card sx={{ m: 2 }}>
-          <CardContent>
-            <Typography variant="h5">Block Header Info</Typography>
-            {block ? (
-              <Typography variant="body1" key={block.hash}>
-                {JSON.stringify(block, null, 2)}
-              </Typography>
-            ) : (
-              <div></div>
-            )}
-          </CardContent>
-        </Card>
+        <BlockHeaderInfoComponent block={block} />
         <Card sx={{ m: 2 }}>
           <CardContent>
             <Typography variant="h5">Transactions in Block</Typography>
-            {transactions !== null ? (
-              transactions.map((transaction) => (
-                <Typography variant="body1" key={transaction.txid}>
-                  {JSON.stringify(transaction, null, 2)}
-                </Typography>
-              ))
-            ) : (
-              <div></div>
-            )}
+            <Pagination
+              count={Math.ceil(txids.length / 25)}
+              color="primary"
+              page={page}
+              onChange={(event, value) => {
+                setPage(value);
+                setPageTXs([...txids.slice((value - 1) * 25, value * 25)]);
+              }}
+            />
+            <BlockTxsComponent txids={pageTXs} page={page} />
           </CardContent>
         </Card>
       </Grid>
