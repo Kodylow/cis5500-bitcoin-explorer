@@ -3,7 +3,7 @@ import React from "react";
 import { BlockHeader } from "./BlocksTypes";
 
 export interface IProps {
-  block: BlockHeader | null;
+  block: BlockHeader | undefined;
 }
 
 const BlockHeaderInfoComponent: React.FC<IProps> = ({ block }) => {
