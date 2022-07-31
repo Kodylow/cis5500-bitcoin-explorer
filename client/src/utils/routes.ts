@@ -1,9 +1,8 @@
 // pages
-import HomePage from "../pages/HomePage";
 import BlocksPage from "../pages/BlocksPage/BlocksPage";
 import UTXOsPage from "../pages/UTXOsPage/UTXOsPage";
 import TXIDsPage from "../pages/TXIDsPage/TXIDsPage";
-import DashboardPage from "../pages/DashboardPage/DashboardPage";
+import SummaryPage from "../pages/SummaryPage/SummaryPage";
 
 // other
 import { FC } from "react";
@@ -23,7 +22,7 @@ export const routes: Array<Route> = [
     title: "Home",
     path: "/",
     enabled: true,
-    component: HomePage,
+    component: SummaryPage,
   },
   {
     key: "blocks-route",
@@ -45,12 +44,5 @@ export const routes: Array<Route> = [
     path: "/txids",
     enabled: true,
     component: TXIDsPage,
-  },
-  {
-    key: "dashboard-route",
-    title: "Dashboard",
-    path: "/dashboard",
-    enabled: true,
-    component: DashboardPage,
   },
 ];

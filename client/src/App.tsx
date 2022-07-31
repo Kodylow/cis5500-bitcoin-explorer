@@ -7,7 +7,7 @@ import BlocksPage from "./pages/BlocksPage/BlocksPage";
 import UTXOsPage from "./pages/UTXOsPage/UTXOsPage";
 import TXIDsPage from "./pages/TXIDsPage/TXIDsPage";
 import { CssBaseline } from "@mui/material";
-import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import SummaryPage from "./pages/SummaryPage/SummaryPage";
 export interface IAppProps {}
 
 const theme = createTheme({
@@ -23,11 +23,10 @@ const App: React.FC<IAppProps> = (props) => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
+            <Route index element={<SummaryPage />} />
             <Route path="/UTXOs" element={<UTXOsPage />} />
             <Route path="/blocks" element={<BlocksPage />} />
             <Route path="/txids" element={<TXIDsPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
