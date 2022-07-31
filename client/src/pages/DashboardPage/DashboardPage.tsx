@@ -27,7 +27,6 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
     }
   }
 
-
   React.useEffect(() => {
     (async () => {
       const res = await (
@@ -42,7 +41,6 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
       txs['date'] = String(moment(txs['date']).utc().format('YYYY-MM-DD'));
     }
   }
-
 
   // const [btcMinedData, setBTCMinedOverTime] =  React.useState<Array<DataOverTIme> | undefined>(undefined);
   // React.useEffect(() => {
