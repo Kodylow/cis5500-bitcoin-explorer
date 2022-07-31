@@ -22,13 +22,13 @@ import {
 // }
 
 export interface IProps {
-  block: BlockHeader | null;
-  setBlock: Dispatch<SetStateAction<BlockHeader | null>>;
+  block: BlockHeader | undefined;
+  setBlock: Dispatch<SetStateAction<BlockHeader | undefined>>;
 }
 
 const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
   const [blockheaders, setBlockheaders] =
-    React.useState<Array<BlockHeader> | null>(null);
+    React.useState<Array<BlockHeader> | undefined>(undefined);
 
   React.useEffect(() => {
     (async () => {

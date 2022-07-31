@@ -6,6 +6,7 @@ import transactionHeaderRouter from "./routes/transactionheaders";
 import addressRouter from "./routes/address";
 import coinbaseTxsRouter from "./routes/coinbasetxs";
 import traceTxsRouter from "./routes/utxos";
+import dashboardRouter from "./routes/dashboard";
 
 const router: Express = express();
 
@@ -35,6 +36,8 @@ router.use("/transactions", transactionHeaderRouter);
 router.use("/address", addressRouter);
 router.use("/coinbasetxs", coinbaseTxsRouter);
 router.use("/utxos", traceTxsRouter);
+router.use("/dashboard", dashboardRouter);
+
 
 /** Error handling */
 router.use((req, res, next) => {

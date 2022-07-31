@@ -17,15 +17,14 @@ import BlockHeaderInfoComponent from "./BlockHeaderInfoComponent";
 export interface IBlocksPageProps {}
 
 const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
-  const [block, setBlock] = React.useState<BlockHeader | null>(null);
+  const [block, setBlock] = React.useState<BlockHeader | undefined>(undefined);
   const [page, setPage] = React.useState(1);
   const [pageTXs, setPageTXs] = React.useState<Array<string>>([]);
   const [txids, setTxids] = React.useState<Array<string>>([]);
 
   React.useEffect(() => {
-    if (block !== null) {
+    if (block !== undefined) {
       (async () => {
-        console.log(block.hash);
         // check with David, not sure why this isn't
         const url = `http://www.localhost:5010/blockheaders/${block.hash}/txs`;
         console.log(url);
