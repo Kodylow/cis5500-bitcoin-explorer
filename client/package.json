@@ -19,6 +19,7 @@
     "plotly.js": "^2.13.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-organizational-chart": "^2.1.1",
     "react-plotly.js": "^2.5.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
@@ -51,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@types/query-string": "^6.3.0",
     "babel-plugin-import": "^1.13.5",
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.2.1"

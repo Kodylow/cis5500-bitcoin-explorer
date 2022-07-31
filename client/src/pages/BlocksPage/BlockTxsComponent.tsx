@@ -1,5 +1,6 @@
 import { List, ListItem, Typography } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export interface IProps {
   txids: Array<string>;
@@ -21,7 +22,13 @@ const BlockTxsComponent: React.FC<IProps> = ({ txids, page }) => {
             return (
               <ListItem key={txid}>
                 <Typography>
-                  {index + (page - 1) * 25} : {txid}
+                  {index + (page - 1) * 25} :{" "}
+                  <Link
+                    to={`/tx/${txid}`}
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
+                    {txid}
+                  </Link>
                 </Typography>
               </ListItem>
             );
