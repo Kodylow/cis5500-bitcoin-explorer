@@ -1,7 +1,7 @@
 // pages
 import BlocksPage from "../pages/BlocksPage/BlocksPage";
 import UTXOsPage from "../pages/UTXOsPage/UTXOsPage";
-import TXIDsPage from "../pages/TXDetailsPage/TXDetailsPage";
+import TXIDsPage from "../pages/DetailsPage/TXDetailsPage";
 import SummaryPage from "../pages/SummaryPage/SummaryPage";
 
 // other

@@ -4,7 +4,8 @@ import Layout from "./components/Layout/Layout";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import BlocksPage from "./pages/BlocksPage/BlocksPage";
 import UTXOsPage from "./pages/UTXOsPage/UTXOsPage";
-import TXDetailsPage from "./pages/TXDetailsPage/TXDetailsPage";
+import TXDetailsPage from "./pages/DetailsPage/TXDetailsPage";
+import AddressDetailsPage from "./pages/DetailsPage/AddressDetailsPage";
 import { CssBaseline } from "@mui/material";
 import SummaryPage from "./pages/SummaryPage/SummaryPage";
 export interface IAppProps {}
@@ -26,6 +27,7 @@ const App: React.FC<IAppProps> = (props) => {
             <Route path="/UTXOs" element={<UTXOsPage />} />
             <Route path="/blocks" element={<BlocksPage />} />
             <Route path="/tx/:txid" element={<TXDetailsPage />} />
+            <Route path="/address/:address" element={<AddressDetailsPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
