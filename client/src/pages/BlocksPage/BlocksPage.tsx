@@ -15,13 +15,13 @@ import { BlockHeader, Transaction } from "./BlocksTypes";
 export interface IBlocksPageProps {}
 
 const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
-  const [block, setBlock] = React.useState<BlockHeader | null>(null);
+  const [block, setBlock] = React.useState<BlockHeader | undefined>(undefined);
   const [transactions, setTransactions] = React.useState<Array<Transaction>>(
     []
   );
 
   React.useEffect(() => {
-    if (block !== null) {
+    if (block !== undefined) {
       (async () => {
         console.log(block.hash);
         // check with David, not sure why this isn't
@@ -66,7 +66,7 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
             <Typography variant="h5">Block Header Info</Typography>
             {block ? (
               <Typography variant="body1" key={block.hash}>
-                {JSON.stringify(block, null, 2)}
+                {JSON.stringify(block, undefined, 2)}
               </Typography>
             ) : (
               <div></div>
@@ -76,10 +76,10 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         <Card sx={{ m: 2 }}>
           <CardContent>
             <Typography variant="h5">Transactions in Block</Typography>
-            {transactions !== null ? (
+            {transactions !== undefined ? (
               transactions.map((transaction) => (
                 <Typography variant="body1" key={transaction.txid}>
-                  {JSON.stringify(transaction, null, 2)}
+                  {JSON.stringify(transaction, undefined, 2)}
                 </Typography>
               ))
             ) : (
