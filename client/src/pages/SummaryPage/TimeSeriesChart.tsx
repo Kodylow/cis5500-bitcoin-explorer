@@ -12,6 +12,7 @@ const TimeSeriesChart: React.FC<IProps> = ({ timeData, yAxisLabel }) =>  {
     <ResponsiveContainer width="80%" aspect={3}>
       <LineChart
         width={500}
+        height={400}
         data={timeData}
         margin={{ top: 10, right: 30, left: 50, bottom: 50 }}
       >
@@ -25,6 +26,7 @@ const TimeSeriesChart: React.FC<IProps> = ({ timeData, yAxisLabel }) =>  {
           axisLine={false}
           tickLine={false}
           dx={-10}
+          domain={[0, 'auto']}
           label={{ value: yAxisLabel, fill: '#fff', dx: -70, angle: -90, position: 'outsideLeft', opacity: .75 }}
           tick={{fill:"#fff", fontSize: 14, opacity: .75}}
         />
@@ -46,7 +48,7 @@ const TimeSeriesChart: React.FC<IProps> = ({ timeData, yAxisLabel }) =>  {
           name={yAxisLabel}
           dataKey="value"
           strokeWidth="2.5"
-          dot={{fill:"#2e4355",stroke:"#8884d8",strokeWidth: 2,r:5}}
+          // dot={{fill:"#2e4355",stroke:"#8884d8",strokeWidth: 2,r:5}}
           activeDot={{fill:"#2e4355",stroke:"#8884d8",strokeWidth: 2,r:5}} />
       </LineChart>
     </ResponsiveContainer>

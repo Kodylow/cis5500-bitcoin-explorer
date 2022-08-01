@@ -9,6 +9,8 @@ export const getTxsOverTime = async (
   next: NextFunction
 ) => {
 
+  let { startDate, endDate } = req.query;
+
   // query to get all coinbase header info ordered by block height height desc
   const txs_over_time_query = `
     select
@@ -17,9 +19,11 @@ export const getTxsOverTime = async (
     from
       bitcoin.block_headers AS bh
     WHERE
-      bh.timestamp BETWEEN '2020-01-01' AND '2022-08-01'
+      bh.timestamp BETWEEN '${startDate}'  AND '${endDate}'
     group by 1 order by 1 asc;
   `;
+
+  console.log(txs_over_time_query);
 
   // get data for a specific block header
   let pgResult: QueryResult<any> = await pool.query(txs_over_time_query);
@@ -36,22 +40,17 @@ export const getBTCMinedOverTime = async (
   next: NextFunction
 ) => {
 
+  let { startDate, endDate } = req.query;
+
   // query to get all coinbase header info ordered by block height height desc
-  const txs_over_time_query = `
-    with btc_mined_pre as (
-      select txid
-        , block_hash
-        , cast(element -> 'value' as bigint) / cast(100000000 as bigint) as coinbase_btc_amount
-      from
-        bitcoin.coinbase_txs
-        , jsonb_array_elements(outputs) element
-    ), btc_mined as (
+  const btc_mined_query = `
+    with btc_mined as (
       select
-        date_trunc('month', bh.timestamp::date) as "date"
-        , sum(btc.coinbase_btc_amount) as "btc_mined"
+        date_trunc('year', bh.timestamp::date) as "date"
+        , sum(ct.btc_mined) as btc_mined
       from
-        btc_mined_pre as btc
-        inner join bitcoin.block_headers AS bh on btc.block_hash = bh.hash
+        bitcoin.coinbase_txs_test as ct
+        inner join bitcoin.block_headers as bh on ct.block_hash = bh.hash
       group by 1
     ), btc_mined_cumulative as (
         select
@@ -60,15 +59,16 @@ export const getBTCMinedOverTime = async (
         from btc_mined order by 1 asc
     )
     select * from btc_mined_cumulative
-    where date BETWEEN '2015-01-01' AND '2022-08-01'
+    where date BETWEEN '${startDate}'  AND '${endDate}';
+
   `;
 
   // get data for a specific block header
-  let pgResult: QueryResult<any> = await pool.query(txs_over_time_query);
-  let txsOverTime: any[] = pgResult.rows;
+  let pgResult: QueryResult<any> = await pool.query(btc_mined_query);
+  let btcMined: any[] = pgResult.rows;
 
   return res.status(200).json({
-    message: txsOverTime,
+    message: btcMined,
   });
 };
 
@@ -77,6 +77,7 @@ export const getDifficultyDataByMonth = async (
   res: Response,
   next: NextFunction
 ) => {
+  let { startDate, endDate } = req.query;
 
   // query to get difficulty by month
   // divided by trillion (the size of difficulty is too large to display unless divided here)
@@ -87,7 +88,7 @@ export const getDifficultyDataByMonth = async (
     from
       bitcoin.block_headers AS bh
     WHERE
-      bh.timestamp BETWEEN '2015-01-01' AND '2022-08-01'
+      bh.timestamp BETWEEN '${startDate}'  AND '${endDate}'
     group by 1 order by 1 asc;
   `;
 
