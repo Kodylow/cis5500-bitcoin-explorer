@@ -1,58 +1,56 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Switch from "@mui/material/Switch";
-import Paper from "@mui/material/Paper";
-import Grow from "@mui/material/Grow";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import { Theme } from "@mui/material/styles";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Link } from "react-router-dom";
 import { Transaction } from "./BlocksTypes";
-import { Grid } from "@mui/material";
-
-const icon = (
-  <Paper sx={{ m: 1 }} elevation={4}>
-    <Box component="svg" sx={{ width: 100, height: 100 }}>
-      <Box
-        component="polygon"
-        sx={{
-          fill: (theme: Theme) => theme.palette.common.white,
-          stroke: (theme) => theme.palette.divider,
-          strokeWidth: 1,
-        }}
-        points="0,100 50,00, 100,100"
-      />
-    </Box>
-  </Paper>
-);
 
 export interface IProps {
+  index: number;
   txid: string;
 }
 
-const CollapsableTransaction: React.FC<IProps> = ({ txid }) => {
-  const [checked, setChecked] = React.useState(false);
+const CollapsableTransaction: React.FC<IProps> = ({ index, txid }) => {
+  const [tx, setTx] = React.useState<Transaction | undefined>();
 
-  const handleChange = () => {
-    setChecked((prev) => !prev);
+  const handleClick = () => {
+    if (txid !== undefined) {
+      (async () => {
+        const url = `http://localhost:5010/transactions/${txid}`;
+        let res = await fetch(url);
+        let data = await res.json();
+        setTx(data.message);
+      })();
+    }
   };
 
   return (
-    <Box sx={{ height: 180 }}>
-      <FormControlLabel
-        control={<Switch checked={checked} onChange={handleChange} />}
-        label=""
-      />
-      <Box sx={{ display: "flex" }}>
-        <Grow in={checked}>{icon}</Grow>
-        {/* Conditionally applies the timeout prop to change the entry speed. */}
-        <Grow
-          in={checked}
-          style={{ transformOrigin: "0 0 0" }}
-          {...(checked ? { timeout: 1000 } : {})}
+    <div>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon onClick={() => handleClick()} />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
         >
-          {icon}
-        </Grow>
-      </Box>
-    </Box>
+          <Typography>
+            {index} :{" "}
+            <Link
+              to={`/tx/${txid}`}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              {txid}
+            </Link>
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            {tx ? JSON.stringify(tx, null, 2) : "Loading..."}
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+    </div>
   );
 };
 

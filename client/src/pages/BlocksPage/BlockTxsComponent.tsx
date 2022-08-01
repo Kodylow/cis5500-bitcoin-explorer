@@ -22,16 +22,10 @@ const BlockTxsComponent: React.FC<IProps> = ({ txids, page }) => {
           {txids.map((txid, index) => {
             return (
               <ListItem key={txid}>
-                <Typography>
-                  {index + (page - 1) * 25} :{" "}
-                  <Link
-                    to={`/tx/${txid}`}
-                    style={{ textDecoration: "none", color: "white" }}
-                  >
-                    {txid}
-                  </Link>
-                  <CollapsableTransaction txid={txid} />
-                </Typography>
+                <CollapsableTransaction
+                  index={index + (page - 1) * 25}
+                  txid={txid}
+                />
               </ListItem>
             );
           })}
