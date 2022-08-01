@@ -1,6 +1,7 @@
 import { List, ListItem, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
+import CollapsableTransaction from "./CollapsableTransactionComponent";
 
 export interface IProps {
   txids: Array<string>;
@@ -29,6 +30,7 @@ const BlockTxsComponent: React.FC<IProps> = ({ txids, page }) => {
                   >
                     {txid}
                   </Link>
+                  <CollapsableTransaction txid={txid} />
                 </Typography>
               </ListItem>
             );
