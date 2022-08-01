@@ -1,7 +1,7 @@
 // pages
 import BlocksPage from "../pages/BlocksPage/BlocksPage";
 import UTXOsPage from "../pages/UTXOsPage/UTXOsPage";
-import TXIDsPage from "../pages/TXIDsPage/TXIDsPage";
+import TXIDsPage from "../pages/DetailsPage/TXDetailsPage";
 import SummaryPage from "../pages/SummaryPage/SummaryPage";
 
 // other
@@ -38,11 +38,11 @@ export const routes: Array<Route> = [
     enabled: true,
     component: UTXOsPage,
   },
-  {
-    key: "txids-route",
-    title: "TXIDs",
-    path: "/txids",
-    enabled: true,
-    component: TXIDsPage,
-  },
+  // {
+  //   key: "txids-route",
+  //   title: "TXIDs",
+  //   path: "/txids",
+  //   enabled: true,
+  //   component: TXIDsPage,
+  // },
 ];
