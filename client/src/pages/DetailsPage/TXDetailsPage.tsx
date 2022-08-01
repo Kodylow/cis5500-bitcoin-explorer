@@ -4,11 +4,12 @@ import { useParams } from "react-router-dom";
 import { Transaction } from "../BlocksPage/BlocksTypes";
 import { Tree } from "react-tree-graph";
 import "./styles.css";
+import MerkleProof from "./MerkleProofComponent";
 
 export interface IProps {}
 
 const TXDetailsPage: React.FC<IProps> = () => {
-  let { txid } = useParams();
+  const { txid } = useParams();
   const [tx, setTx] = React.useState<Transaction | undefined>(undefined);
   const [tree, setTree] = React.useState<any>(undefined);
   const [merkleproof, setMerkleproof] = React.useState<String[] | undefined>(
@@ -44,13 +45,6 @@ const TXDetailsPage: React.FC<IProps> = () => {
       children,
     };
   };
-
-  const createMerkleTree = async (txid: string) => {
-    const url = `http://blockstream.info/api/tx/${txid}/merkleblock-proof`;
-    let res = await fetch(url);
-    let data = await res.json();
-  };
-
   return (
     <div>
       <Grid>
@@ -79,6 +73,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
           <Typography variant="body1">Loading...</Typography>
         )}
       </div>
+      <MerkleProof txid={txid} />
     </div>
   );
 };

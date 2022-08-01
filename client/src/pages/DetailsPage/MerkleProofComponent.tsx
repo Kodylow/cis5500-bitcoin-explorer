@@ -1,16 +1,12 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
-import { useParams } from "react-router-dom";
-import { Transaction } from "../BlocksPage/BlocksTypes";
-import { Tree } from "react-tree-graph";
 import "./styles.css";
 
-export interface IProps {}
+export interface IProps {
+  txid: string | undefined;
+}
 
-const TXDetailsPage: React.FC<IProps> = () => {
-  let { txid } = useParams();
-  const [tx, setTx] = React.useState<Transaction | undefined>(undefined);
-  const [tree, setTree] = React.useState<any>(undefined);
+const MerkleProof: React.FC<IProps> = ({ txid }) => {
   const [merkleproof, setMerkleproof] = React.useState<String[] | undefined>(
     undefined
   );
@@ -18,70 +14,26 @@ const TXDetailsPage: React.FC<IProps> = () => {
   React.useEffect(() => {
     if (txid !== undefined) {
       (async () => {
-        const url = `http://localhost:5010/transactions/${txid}`;
+        const url = `http://localhost.com:5010/tx/${txid}/merkle-proof`;
         let res = await fetch(url);
         let data = await res.json();
-        setTx(data.message);
+        console.log(data.message);
+        setMerkleproof(data.message);
       })();
     }
   }, [txid]);
 
-  React.useEffect(() => {
-    if (tx) {
-      setTree(createTree(tx));
-    }
-  }, [tx]);
-
-  const createTree = (transaction: Transaction) => {
-    const name = transaction.txid;
-    const children = transaction.vin.map((vin: any) => {
-      return {
-        name: vin.prevout.scriptpubkey_address,
-      };
-    });
-    return {
-      name,
-      children,
-    };
-  };
-
-  const createMerkleTree = async (txid: string) => {
-    const url = `http://blockstream.info/api/tx/${txid}/merkleblock-proof`;
-    let res = await fetch(url);
-    let data = await res.json();
-    setMerkleproof(data.message);
-  };
+  //const createMerkleTree = async (txid: string) => {};
 
   return (
-    <div>
-      <Grid>
-        <Typography variant="h1" alignSelf={"center"}>
-          TX Exploded View
-        </Typography>
-        {tx ? (
-          <Typography variant="body1">{JSON.stringify(tx, null, 2)}</Typography>
-        ) : (
-          <Typography variant="body1">Loading...</Typography>
-        )}
-      </Grid>
-      <div id="treeWrapper" style={{ width: "50em", height: "20em" }}>
-        {tree ? (
-          <div className="custom-container">
-            <Tree
-              data={tree}
-              height={400}
-              svgProps={{
-                className: "custom",
-              }}
-              width={600}
-            />
-          </div>
-        ) : (
-          <Typography variant="body1">Loading...</Typography>
-        )}
-      </div>
+    <div id="merkleTree" style={{ width: "50em", height: "20em" }}>
+      {merkleproof ? (
+        merkleproof
+      ) : (
+        <Typography variant="body1">Loading...</Typography>
+      )}
     </div>
   );
 };
 
-export default TXDetailsPage;
+export default MerkleProof;

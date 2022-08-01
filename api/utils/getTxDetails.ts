@@ -7,7 +7,6 @@ const getTxDetails = async (txid: String) => {
   let txDetail = txDetailResponse.data;
 
   return txDetail;
-}
-
+};
 
 export default getTxDetails;

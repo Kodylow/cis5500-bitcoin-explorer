@@ -4,6 +4,7 @@ import pool from "../database/db";
 import { QueryResult } from "pg";
 import isValidHeight from "../utils/isValidHeight";
 import getTxDetails from "../utils/getTxDetails";
+import getMerkle from "../utils/getMerkle";
 
 interface txids {
   txid: String[];
@@ -75,7 +76,23 @@ export const getTxDetailsByTxID = async (
   });
 };
 
+// Get detailed vin and vout for a specific transaction id
+export const getMerkleProof = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let id: string = String(req.params.id);
+  let txDetail: any = await getMerkle(id);
+
+  console.log("in here");
+  return res.status(200).json({
+    message: getMerkle,
+  });
+};
+
 export default {
   getTxs,
   getTxDetailsByTxID,
+  getMerkleProof,
 };
