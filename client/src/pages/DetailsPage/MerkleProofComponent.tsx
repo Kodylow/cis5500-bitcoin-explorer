@@ -49,6 +49,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
     const url = `http://blockstream.info/api/tx/${txid}/merkleblock-proof`;
     let res = await fetch(url);
     let data = await res.json();
+    setMerkleproof(data.message);
   };
 
   return (
