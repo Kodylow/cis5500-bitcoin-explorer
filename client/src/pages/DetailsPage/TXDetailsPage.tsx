@@ -15,12 +15,10 @@ const TXDetailsPage: React.FC<IProps> = () => {
   React.useEffect(() => {
     if (txid !== undefined) {
       (async () => {
-        const url = `https://blockstream.info/api/tx/${txid}`;
-        console.log(url);
+        const url = `http://localhost:5010/transactions/${txid}`;
         let res = await fetch(url);
         let data = await res.json();
-        console.log(data);
-        setTx(data);
+        setTx(data.message);
       })();
     }
   }, [txid]);
@@ -32,10 +30,10 @@ const TXDetailsPage: React.FC<IProps> = () => {
   }, [tx]);
 
   const createTree = (transaction: Transaction) => {
-    const name = "root";
+    const name = transaction.txid;
     const children = transaction.vin.map((vin: any) => {
       return {
-        name: "vin",
+        name: vin.prevout.scriptpubkey_address,
       };
     });
     return {

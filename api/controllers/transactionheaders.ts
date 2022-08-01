@@ -69,6 +69,7 @@ export const getTxDetailsByTxID = async (
   let id: string = String(req.params.id);
   let txDetail: any = await getTxDetails(id);
 
+  console.log("in here");
   return res.status(200).json({
     message: txDetail,
   });
