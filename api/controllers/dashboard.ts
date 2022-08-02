@@ -49,7 +49,7 @@ export const getBTCMinedOverTime = async (
         date_trunc('year', bh.timestamp::date) as "date"
         , sum(ct.btc_mined) as btc_mined
       from
-        bitcoin.coinbase_txs_test as ct
+        bitcoin.coinbase_txs as ct
         inner join bitcoin.block_headers as bh on ct.block_hash = bh.hash
       group by 1
     ), btc_mined_cumulative as (

@@ -12,6 +12,7 @@ import {
 import { routes } from "../utils/routes";
 import MenuIcon from "@mui/icons-material/Menu";
 import { NavLink } from "react-router-dom";
+import btcLogo from './btc.png';
 
 const Navbar: FC = (): ReactElement => {
   const [anchorElNav, setAnchorElNav] = React.useState(undefined);
@@ -29,17 +30,28 @@ const Navbar: FC = (): ReactElement => {
       sx={{
         width: "100%",
         height: "auto",
-        backgroundColor: "primary.main",
+        backgroundColor: "#1d1f31",
       }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+        <Box
+        component="img"
+        sx={{
+          height: "50px",
+          width: 'auto',
+          display: 'inline-block',
+        }}
+        alt="Bitcoin Logo"
+        src={btcLogo}
+      />
           <Typography
             variant="h6"
             noWrap
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
+              letterSpacing: "1.5px"
             }}
           >
             The Knuths
@@ -107,7 +119,12 @@ const Navbar: FC = (): ReactElement => {
                   color="black"
                   underline="none"
                   variant="button"
-                  sx={{ fontSize: "large", marginLeft: "2rem" }}
+                  sx={{
+                    fontSize: "1rem", marginLeft: "2rem",
+                    letterSpacing: "1.25px",
+                    fontWeight: "normal",
+                    color: "#fff",
+                  }}
                 >
                   {page.title}
                 </Link>

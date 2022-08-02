@@ -7,6 +7,7 @@ import {
   Pagination,
   Paper,
   Typography,
+  Box,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
@@ -14,7 +15,11 @@ import BlocksListComponent from "./BlocksListComponent";
 import { BlockHeader } from "./BlocksTypes";
 import BlockTxsComponent from "./BlockTxsComponent";
 import BlockHeaderInfoComponent from "./BlockHeaderInfoComponent";
+import blockImg from './block.png';
+
+
 export interface IBlocksPageProps {}
+
 
 const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   const [block, setBlock] = React.useState<BlockHeader | undefined>(undefined);
@@ -62,9 +67,36 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         <BlocksListComponent block={block} setBlock={setBlock} />
       </Grid>
       <Grid item xs={10} sx={{ p: 2 }}>
-        <Typography variant="h3" align="center">
-          Block: {block ? block.height : "none"}
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            marginRight: "auto",
+            marginLeft: "auto",
+            alignItems: "center",
+            mt: "2rem",
+          }}
+        >
+          {
+            block ?
+              <Box
+                component="img"
+                sx={{
+                  height: "50px",
+                  width: 'auto',
+                  mr: ".55rem",
+                }}
+                alt="Block img"
+                src={blockImg}
+              />
+              : ''
+          }
+          <Typography variant="h3" align="center" alignItems="center">
+            {block ? 'Block ' + block.height : "No Block Selected"}
+          </Typography>
+        </Box>
+
         <BlockHeaderInfoComponent block={block} />
         <Card sx={{ m: 2 }}>
           <CardContent>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
-import SquareIcon from "@mui/icons-material/Square";
+import blockImg from "./block.png";
 import { BlockHeader } from "./BlocksTypes";
 import {
   Avatar,
@@ -9,6 +9,7 @@ import {
   ListItemAvatar,
   Typography,
   ListItemText,
+  Box,
 } from "@mui/material";
 
 // function createData(
@@ -27,8 +28,9 @@ export interface IProps {
 }
 
 const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
-  const [blockheaders, setBlockheaders] =
-    React.useState<Array<BlockHeader> | undefined>(undefined);
+  const [blockheaders, setBlockheaders] = React.useState<
+    Array<BlockHeader> | undefined
+  >(undefined);
 
   React.useEffect(() => {
     (async () => {
@@ -62,9 +64,16 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
               key={blockheader.hash}
             >
               <ListItemAvatar>
-                <Avatar>
-                  <SquareIcon />
-                </Avatar>
+                <Box
+                  component="img"
+                  sx={{
+                    height: "50px",
+                    width: "auto",
+                    mr: ".55rem",
+                  }}
+                  alt="Block img"
+                  src={blockImg}
+                />
               </ListItemAvatar>
               <ListItemText
                 primary={blockheader.height}
