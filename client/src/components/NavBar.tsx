@@ -8,11 +8,14 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  Paper,
+  InputBase,
 } from "@mui/material";
 import { routes } from "../utils/routes";
 import MenuIcon from "@mui/icons-material/Menu";
 import { NavLink } from "react-router-dom";
-import btcLogo from './btc.png';
+import SearchIcon from "@mui/icons-material/Search";
+import btcLogo from "./btc.png";
 
 const Navbar: FC = (): ReactElement => {
   const [anchorElNav, setAnchorElNav] = React.useState(undefined);
@@ -35,23 +38,23 @@ const Navbar: FC = (): ReactElement => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-        <Box
-        component="img"
-        sx={{
-          height: "50px",
-          width: 'auto',
-          display: 'inline-block',
-        }}
-        alt="Bitcoin Logo"
-        src={btcLogo}
-      />
+          <Box
+            component="img"
+            sx={{
+              height: "50px",
+              width: "auto",
+              display: "inline-block",
+            }}
+            alt="Bitcoin Logo"
+            src={btcLogo}
+          />
           <Typography
             variant="h6"
             noWrap
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              letterSpacing: "1.5px"
+              letterSpacing: "1.5px",
             }}
           >
             The Knuths
@@ -120,7 +123,8 @@ const Navbar: FC = (): ReactElement => {
                   underline="none"
                   variant="button"
                   sx={{
-                    fontSize: "1rem", marginLeft: "2rem",
+                    fontSize: "1rem",
+                    marginLeft: "2rem",
                     letterSpacing: "1.25px",
                     fontWeight: "normal",
                     color: "#fff",
@@ -131,6 +135,23 @@ const Navbar: FC = (): ReactElement => {
               ))}
             </Box>
           </Box>
+          <Paper
+            component="form"
+            sx={{
+              p: "2px 4px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search the Timechain"
+              inputProps={{ "aria-label": "Search for a Block" }}
+            />
+            <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Paper>
         </Toolbar>
       </Container>
     </Box>

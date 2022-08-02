@@ -2,24 +2,18 @@ import {
   Card,
   CardContent,
   Grid,
-  IconButton,
-  InputBase,
   Pagination,
-  Paper,
   Typography,
   Box,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import BlocksListComponent from "./BlocksListComponent";
 import { BlockHeader } from "./BlocksTypes";
 import BlockTxsComponent from "./BlockTxsComponent";
 import BlockHeaderInfoComponent from "./BlockHeaderInfoComponent";
-import blockImg from './block.png';
-
+import blockImg from "./block.png";
 
 export interface IBlocksPageProps {}
-
 
 const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   const [block, setBlock] = React.useState<BlockHeader | undefined>(undefined);
@@ -47,23 +41,6 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   return (
     <Grid container spacing={1}>
       <Grid item xs={2}>
-        <Paper
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search the Timechain"
-            inputProps={{ "aria-label": "Search for a Block" }}
-          />
-          <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-            <SearchIcon />
-          </IconButton>
-        </Paper>
         <BlocksListComponent block={block} setBlock={setBlock} />
       </Grid>
       <Grid item xs={10} sx={{ p: 2 }}>
@@ -78,22 +55,22 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
             mt: "2rem",
           }}
         >
-          {
-            block ?
-              <Box
-                component="img"
-                sx={{
-                  height: "50px",
-                  width: 'auto',
-                  mr: ".55rem",
-                }}
-                alt="Block img"
-                src={blockImg}
-              />
-              : ''
-          }
+          {block ? (
+            <Box
+              component="img"
+              sx={{
+                height: "50px",
+                width: "auto",
+                mr: ".55rem",
+              }}
+              alt="Block img"
+              src={blockImg}
+            />
+          ) : (
+            ""
+          )}
           <Typography variant="h3" align="center" alignItems="center">
-            {block ? 'Block ' + block.height : "No Block Selected"}
+            {block ? "Block " + block.height : "No Block Selected"}
           </Typography>
         </Box>
 
