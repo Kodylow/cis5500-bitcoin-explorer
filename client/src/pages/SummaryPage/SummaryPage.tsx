@@ -2,7 +2,8 @@ import React from "react";
 import TimeSeriesChart from './TimeSeriesChart';
 import {
   Grid,
-  TextField
+  TextField,
+  Typography
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -23,6 +24,9 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
 
   React.useEffect(() => {
     (async () => {
+
+      setTxsOverTime(undefined);
+
       const res = await (
         await fetch("http://www.localhost:5010/dashboard/txsovertime?startDate=" + moment(startDate).format("YYYY-MM-DD") + "&endDate=" + moment(endDate).format("YYYY-MM-DD"))
       ).json();
@@ -40,6 +44,8 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
 
   React.useEffect(() => {
     (async () => {
+      setDifficultyData(undefined);
+
       const res = await (
         await fetch("http://www.localhost:5010/dashboard/diffcultybymonth?startDate=" + moment(startDate).format("YYYY-MM-DD") + "&endDate=" + moment(endDate).format("YYYY-MM-DD"))
       ).json();
@@ -57,6 +63,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
 
   React.useEffect(() => {
     (async () => {
+      setBTCMinedOverTime(undefined);
       const res = await (
         await fetch("http://www.localhost:5010/dashboard/btcminedovertime?startDate=" + moment(startDate).format("YYYY-MM-DD") + "&endDate=" + moment(endDate).format("YYYY-MM-DD"))
       ).json();
@@ -108,12 +115,36 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
       </Grid>
 
       <Grid container sx={{mt: '3rem', display: 'flex', flexDirection: 'column'}} spacing={0} alignItems="center">
-        <h2>Total Transactions by Month</h2>
-        <TimeSeriesChart timeData={txsData} yAxisLabel="Total Transactions"></TimeSeriesChart>
-        <h2>Difficulty by Month (in Trillion)</h2>
-        <TimeSeriesChart timeData={difficultyData} yAxisLabel="Difficulty in Trillion"></TimeSeriesChart>
-        <h2>Total BTC Mined by Year</h2>
-        <TimeSeriesChart timeData={btcMinedData} yAxisLabel="Total BTC Mined"></TimeSeriesChart>
+        {txsData ?
+        <React.Fragment>
+          <h2>Total Transactions by Month</h2>
+          <TimeSeriesChart timeData={txsData} yAxisLabel="Total Transactions"></TimeSeriesChart>
+        </React.Fragment>
+
+            :
+          <Typography variant="h5" align="center" sx={{'mt': '2.5rem'}}>
+            Loading Transactions Graph...
+          </Typography>}
+
+        {difficultyData ?
+          <React.Fragment>
+            <h2>Difficulty by Month (in Trillion)</h2>
+            <TimeSeriesChart timeData={difficultyData} yAxisLabel="Difficulty"></TimeSeriesChart>
+          </React.Fragment>
+
+            :
+          <Typography variant="h5" align="center" sx={{'mt': '2.5rem'}}>
+            Loading Difficulty Graph...
+          </Typography>}
+        {btcMinedData ?
+          <React.Fragment>
+            <h2>Total BTC Mined by Year</h2>
+            <TimeSeriesChart timeData={btcMinedData} yAxisLabel="Total BTC Mined"></TimeSeriesChart>
+          </React.Fragment>
+            :
+          <Typography variant="h5" align="center" sx={{'mt': '2.5rem', 'mb': '2.5rem'}}>
+            Loading BTC Mined Graph...
+          </Typography>}
       </Grid>
     </React.Fragment>
   );
