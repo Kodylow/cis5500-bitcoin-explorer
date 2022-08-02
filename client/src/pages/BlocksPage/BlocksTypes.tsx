@@ -1,8 +1,15 @@
 export interface BlockHeader {
+  [key: string]: any;
   hash: string;
   height: number;
   timestamp: string;
   version: number;
+  weight: number;
+  size: number;
+  difficulty: number;
+  confirmations: number;
+  nonce: number;
+  bits: number
 }
 
 export interface Transaction {

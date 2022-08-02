@@ -2,19 +2,21 @@ import React from "react";
 import TimeSeriesChart from './TimeSeriesChart';
 import {
   Grid,
-  TextField
+  TextField,
+  Typography
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DataOverTIme } from './DataTypes';
+import { DataOverTime } from './DataTypes';
 import moment from 'moment'
+import LoadingGraph from './LoadingGraph';
 
 export interface IDashboardPageProps {}
 
 const DashboardPage: React.FC<IDashboardPageProps> = () => {
-  const [txsData, setTxsOverTime] = React.useState<Array<DataOverTIme> | undefined>(undefined);
-  const [difficultyData, setDifficultyData] = React.useState<Array<DataOverTIme> | undefined>(undefined);
-  const [btcMinedData, setBTCMinedOverTime] =  React.useState<Array<DataOverTIme> | undefined>(undefined);
+  const [txsData, setTxsOverTime] = React.useState<Array<DataOverTime>  | undefined>([]);
+  const [difficultyData, setDifficultyData] = React.useState<Array<DataOverTime> | undefined>([]);
+  const [btcMinedData, setBTCMinedOverTime] =  React.useState<Array<DataOverTime> | undefined>([]);
 
   let initalStartDate: Date = new Date("2015-01-01");
   let initalEndDate: Date = new Date();
@@ -23,10 +25,10 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
 
   React.useEffect(() => {
     (async () => {
+      setTxsOverTime(undefined);
       const res = await (
         await fetch("http://www.localhost:5010/dashboard/txsovertime?startDate=" + moment(startDate).format("YYYY-MM-DD") + "&endDate=" + moment(endDate).format("YYYY-MM-DD"))
       ).json();
-
       setTxsOverTime([...res.message]);
     })();
   }, [startDate, endDate]);
@@ -40,10 +42,10 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
 
   React.useEffect(() => {
     (async () => {
+      setDifficultyData(undefined);
       const res = await (
         await fetch("http://www.localhost:5010/dashboard/diffcultybymonth?startDate=" + moment(startDate).format("YYYY-MM-DD") + "&endDate=" + moment(endDate).format("YYYY-MM-DD"))
       ).json();
-
       setDifficultyData([...res.message]);
     })();
   }, [startDate, endDate]);
@@ -57,6 +59,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
 
   React.useEffect(() => {
     (async () => {
+      setBTCMinedOverTime(undefined);
       const res = await (
         await fetch("http://www.localhost:5010/dashboard/btcminedovertime?startDate=" + moment(startDate).format("YYYY-MM-DD") + "&endDate=" + moment(endDate).format("YYYY-MM-DD"))
       ).json();
@@ -108,12 +111,18 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
       </Grid>
 
       <Grid container sx={{mt: '3rem', display: 'flex', flexDirection: 'column'}} spacing={0} alignItems="center">
-        <h2>Total Transactions by Month</h2>
-        <TimeSeriesChart timeData={txsData} yAxisLabel="Total Transactions"></TimeSeriesChart>
-        <h2>Difficulty by Month (in Trillion)</h2>
-        <TimeSeriesChart timeData={difficultyData} yAxisLabel="Difficulty in Trillion"></TimeSeriesChart>
-        <h2>Total BTC Mined by Year</h2>
-        <TimeSeriesChart timeData={btcMinedData} yAxisLabel="Total BTC Mined"></TimeSeriesChart>
+        <React.Fragment>
+          <Typography variant="h5">Total Transactions by Month</Typography>
+          <TimeSeriesChart timeData={txsData} yAxisLabel="Total Transactions"></TimeSeriesChart>
+        </React.Fragment>
+        <React.Fragment>
+          <Typography variant="h5" sx={{'mt': '1.5rem'}}>Difficulty by Month (in Trillion)</Typography>
+          <TimeSeriesChart timeData={difficultyData} yAxisLabel="Difficulty"></TimeSeriesChart>
+        </React.Fragment>
+        <React.Fragment>
+          <Typography variant="h5" sx={{'mt': '1.5rem'}}>Total BTC Mined by Year</Typography>
+          <TimeSeriesChart timeData={btcMinedData} yAxisLabel="Total BTC Mined"></TimeSeriesChart>
+        </React.Fragment>
       </Grid>
     </React.Fragment>
   );

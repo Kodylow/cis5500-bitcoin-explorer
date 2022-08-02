@@ -1,5 +1,5 @@
 
-export interface DataOverTIme {
+export interface DataOverTime {
   date: string;
   value: number;
 }
