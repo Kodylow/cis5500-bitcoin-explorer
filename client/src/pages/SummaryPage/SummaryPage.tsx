@@ -9,7 +9,6 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DataOverTime } from './DataTypes';
 import moment from 'moment'
-import LoadingGraph from './LoadingGraph';
 
 export interface IDashboardPageProps {}
 
