@@ -3,7 +3,6 @@ import { Dispatch, SetStateAction } from "react";
 import blockImg from "./block.png";
 import { BlockHeader } from "./BlocksTypes";
 import {
-  Avatar,
   List,
   ListItem,
   ListItemAvatar,
@@ -11,16 +10,7 @@ import {
   ListItemText,
   Box,
 } from "@mui/material";
-
-// function createData(
-//   name: string,
-//   calories: number,
-//   fat: number,
-//   carbs: number,
-//   protein: number
-// ) {
-//   return { name, calories, fat, carbs, protein };
-// }
+import moment from 'moment';
 
 export interface IProps {
   block: BlockHeader | undefined;
@@ -44,14 +34,16 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
   return (
     <List
       sx={{
-        height: "87vh",
+        height: "100vh",
         maxWidth: 360,
         bgcolor: "background.paper",
         overflow: "auto",
+        position: 'sticky',
+        top: '.25rem',
       }}
     >
       {blockheaders ? (
-        <div>
+        <React.Fragment>
           {blockheaders.map((blockheader) => (
             <ListItem
               onClick={() => setBlock(blockheader)}
@@ -77,11 +69,11 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
               </ListItemAvatar>
               <ListItemText
                 primary={blockheader.height}
-                secondary={blockheader.timestamp}
+                secondary={moment(blockheader.timestamp).format("YYYY-MM-DD HH:mm:ss")}
               />
             </ListItem>
           ))}
-        </div>
+        </React.Fragment>
       ) : (
         <Typography variant="body1" align="center">
           Loading...
