@@ -21,6 +21,7 @@ export interface Transaction {
   size: number;
   weight: number;
   fee: number;
+  is_coinbase: boolean;
   status: Status;
 }
 

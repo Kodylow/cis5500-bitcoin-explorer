@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link } from "react-router-dom";
 import { Transaction } from "./BlocksTypes";
+import TransactionHeaderInfoComponent from "./TransactionHeaderInfoComponent";
 
 export interface IProps {
   index: number;
@@ -35,19 +36,16 @@ const CollapsableTransaction: React.FC<IProps> = ({ index, txid }) => {
           id="panel1a-header"
         >
           <Typography>
-            {index} :{" "}
             <Link
               to={`/tx/${txid}`}
-              style={{ textDecoration: "none", color: "white" }}
+              style={{ textDecoration: "none", color: '#00ccff' }}
             >
               {txid}
             </Link>
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            {tx ? JSON.stringify(tx, null, 2) : "Loading..."}
-          </Typography>
+          {tx ? <TransactionHeaderInfoComponent transaction={tx}/> : <Typography variant="h5">Loading...</Typography>}
         </AccordionDetails>
       </Accordion>
     </div>

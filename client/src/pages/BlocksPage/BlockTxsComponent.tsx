@@ -1,6 +1,5 @@
-import { List, ListItem, Typography } from "@mui/material";
+import { List, Grid, ListItem, Typography } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
 import CollapsableTransaction from "./CollapsableTransactionComponent";
 
 export interface IProps {
@@ -10,13 +9,15 @@ export interface IProps {
 
 const BlockTxsComponent: React.FC<IProps> = ({ txids, page }) => {
   return (
-    <div>
+    <Grid sx={{position: 'sticky',
+    top: '0'}}>
       {txids.length ? (
         <List
           sx={{
-            height: "50vh",
+            height: "60vh",
             bgcolor: "background.paper",
             overflow: "auto",
+            mt: '1rem',
           }}
         >
           {txids.map((txid, index) => {
@@ -32,10 +33,10 @@ const BlockTxsComponent: React.FC<IProps> = ({ txids, page }) => {
         </List>
       ) : (
         <Typography variant="body1" align="center">
-          none
+          Loading...
         </Typography>
       )}
-    </div>
+    </Grid>
   );
 };
 

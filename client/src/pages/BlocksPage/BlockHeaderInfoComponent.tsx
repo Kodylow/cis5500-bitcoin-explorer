@@ -4,12 +4,14 @@ import {
   TableRow,
   TableBody,
   TableCell,
+  Grid,
   TableContainer,
   Paper,
   Typography,
 } from "@mui/material";
 import React from "react";
 import { BlockHeader } from "./BlocksTypes";
+import moment from 'moment';
 
 export interface IProps {
   block: BlockHeader | undefined;
@@ -17,9 +19,12 @@ export interface IProps {
 
 const BlockHeaderInfoComponent: React.FC<IProps> = ({ block }) => {
   // Additional block information parsing for displaying cleaned key in the table component
-
   return (
+    <React.Fragment>
     <Card sx={{ m: 2 }}>
+      <Typography variant="h5" sx={{'ml': '1rem', 'mt': '1rem'}}>
+        Block Header Information
+      </Typography>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           {block ? (
@@ -39,94 +44,20 @@ const BlockHeaderInfoComponent: React.FC<IProps> = ({ block }) => {
                   {block["hash"]}
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row">
+              <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                <TableCell component="th" scope="row" align="left">
                   Merkle Root:
                 </TableCell>
-                <TableCell component="th" scope="row" />
+                <TableCell align="left"/>
                 <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "right" }}
+                  align="right"
                 >
                   {block["merkle_root"]}
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "left" }}
-                >
-                  Timestamp: {block["timestamp"]}
-                </TableCell>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "right" }}
-                >
-                  Version: {block["version"]}
-                </TableCell>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "right" }}
-                >
-                  Difficulty: {block["difficulty"]}
-                </TableCell>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "right" }}
-                ></TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "left" }}
-                >
-                  Difficulty: {block["difficulty"]}
-                </TableCell>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "right" }}
-                >
-                  Bits: {block["bits"]}
-                </TableCell>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "right" }}
-                >
-                  Nonce: {block["nonce"]}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "left" }}
-                >
-                  Size: {block["size"]}
-                </TableCell>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "right" }}
-                >
-                  Weight: {block["weight"]}
-                </TableCell>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ textAlign: "right" }}
-                >
-                  Confirmations: {block["confirmations"]}
-                </TableCell>
-              </TableRow>
             </TableBody>
+
+
           ) : (
             <Typography
               variant="h5"
@@ -134,12 +65,117 @@ const BlockHeaderInfoComponent: React.FC<IProps> = ({ block }) => {
               alignItems="center"
               sx={{ padding: "2rem" }}
             >
-              Please select a block from the left sidebar.
+              Loading...
             </Typography>
           )}
         </Table>
+
+
+
       </TableContainer>
     </Card>
+    {block ? (
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <Card sx={{ m: 2,  }}>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 350 }}>
+                <TableBody>
+                  <TableRow>
+                      <TableCell component="th" scope="row">
+                        Height
+                      </TableCell>
+                      <TableCell align="right">
+                        {block["height"]}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        Timestamp
+                      </TableCell>
+                      <TableCell  align="right">
+                        {moment(block["timestamp"]).format("MM/DD/YYYY h:mm:ss a")}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        Version
+                      </TableCell>
+                      <TableCell align="right">
+                        {block["version"]}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        Difficulty
+                      </TableCell>
+                      <TableCell align="right">
+                        {block["difficulty"]}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                      <TableCell component="th" scope="row">
+                        Transactions
+                      </TableCell>
+                      <TableCell align="right">
+                        {block["num_tx"]}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+              </Table>
+            </TableContainer>
+          </Card>
+        </Grid>
+        <Grid item xs={6}>
+          <Card sx={{ m: 2 }}>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 350 }}>
+                <TableBody>
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      Bits
+                    </TableCell>
+                    <TableCell  align="right">
+                      {block["bits"]}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      Nonce
+                    </TableCell>
+                    <TableCell align="right">
+                      {block["nonce"]}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      Size
+                    </TableCell>
+                    <TableCell align="right">
+                      {block["size"]}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell component="th" scope="row">
+                      Weight
+                    </TableCell>
+                    <TableCell align="right">
+                      {block["weight"]}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+            </Card>
+          </Grid>
+        </Grid>) : null}
+
+    </React.Fragment>
   );
 };
 

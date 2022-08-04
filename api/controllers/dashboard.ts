@@ -23,8 +23,6 @@ export const getTxsOverTime = async (
     group by 1 order by 1 asc;
   `;
 
-  console.log(txs_over_time_query);
-
   // get data for a specific block header
   let pgResult: QueryResult<any> = await pool.query(txs_over_time_query);
   let txsOverTime: any[] = pgResult.rows;
