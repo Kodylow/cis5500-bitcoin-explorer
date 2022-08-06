@@ -18,6 +18,15 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
   const [btcMinedData, setBTCMinedOverTime] = React.useState<
     Array<DataOverTime> | undefined
   >([]);
+  const [currTxsData, setCurrTxsOverTime] = React.useState<
+    Array<DataOverTime> | undefined
+  >([]);
+  const [currDifficultyData, setCurrDifficultyData] = React.useState<
+    Array<DataOverTime> | undefined
+  >([]);
+  const [currBTCMinedData, setCurrBTCMinedOverTime] = React.useState<
+    Array<DataOverTime> | undefined
+  >([]);
 
   let initalStartDate: Date = new Date("2015-01-01");
   let initalEndDate: Date = new Date();
@@ -42,30 +51,33 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
         )
       ).json();
       setTxsOverTime([...res.message]);
+      setCurrTxsOverTime([...res.message]);
     };
     const difficulty_func = async () => {
       setDifficultyData(undefined);
       const res = await (
         await fetch(
-          "http://www.localhost:5010/dashboard/difficultyovertime?startDate=" +
+          "http://www.localhost:5010/dashboard/difficultybymonth?startDate=" +
             moment(dateRange.startDate).format("YYYY-MM-DD") +
             "&endDate=" +
             moment(dateRange.endDate).format("YYYY-MM-DD")
         )
       ).json();
       setDifficultyData([...res.message]);
+      setCurrDifficultyData([...res.message]);
     };
     const btc_func = async () => {
       setBTCMinedOverTime(undefined);
       const res = await (
         await fetch(
-          "http://www.localhost:5010/dashboard/btcsovertime?startDate=" +
+          "http://www.localhost:5010/dashboard/btcminedovertime?startDate=" +
             moment(dateRange.startDate).format("YYYY-MM-DD") +
             "&endDate=" +
             moment(dateRange.endDate).format("YYYY-MM-DD")
         )
       ).json();
       setBTCMinedOverTime([...res.message]);
+      setCurrBTCMinedOverTime([...res.message]);
     };
 
     Promise.all([tx_func(), difficulty_func(), btc_func()]).then(() => {
@@ -80,21 +92,6 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
     }
   }
 
-  React.useEffect(() => {
-    (async () => {
-      setDifficultyData(undefined);
-      const res = await (
-        await fetch(
-          "http://www.localhost:5010/dashboard/diffcultybymonth?startDate=" +
-            moment(dateRange.startDate).format("YYYY-MM-DD") +
-            "&endDate=" +
-            moment(dateRange.endDate).format("YYYY-MM-DD")
-        )
-      ).json();
-      setDifficultyData([...res.message]);
-    })();
-  }, [dateRange]);
-
   if (difficultyData) {
     for (let difficulty of difficultyData) {
       difficulty["date"] = String(
@@ -104,27 +101,42 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
     }
   }
 
-  React.useEffect(() => {
-    (async () => {
-      setBTCMinedOverTime(undefined);
-      const res = await (
-        await fetch(
-          "http://www.localhost:5010/dashboard/btcminedovertime?startDate=" +
-            moment(dateRange.startDate).format("YYYY-MM-DD") +
-            "&endDate=" +
-            moment(dateRange.endDate).format("YYYY-MM-DD")
-        )
-      ).json();
-      setBTCMinedOverTime([...res.message]);
-    })();
-  }, [dateRange, startDate, endDate]);
-
   if (btcMinedData) {
     for (let btcMined of btcMinedData) {
       btcMined["date"] = String(moment(btcMined["date"]).format("YYYY-MM-DD"));
       btcMined["value"] = Number(btcMined["value"]);
     }
   }
+
+  React.useEffect(() => {
+    if (txsData) {
+      setCurrTxsOverTime(
+        txsData.filter(
+          (x) =>
+            moment(x.date).isSameOrAfter(startDate) &&
+            moment(x.date).isSameOrBefore(endDate)
+        )
+      );
+    }
+    if (difficultyData) {
+      setCurrDifficultyData(
+        difficultyData.filter(
+          (x) =>
+            moment(x.date).isSameOrAfter(startDate) &&
+            moment(x.date).isSameOrBefore(endDate)
+        )
+      );
+    }
+    if (btcMinedData) {
+      setCurrBTCMinedOverTime(
+        btcMinedData.filter(
+          (x) =>
+            moment(x.date).isSameOrAfter(startDate) &&
+            moment(x.date).isSameOrBefore(endDate)
+        )
+      );
+    }
+  }, [startDate, endDate, txsData, difficultyData, btcMinedData]);
 
   return (
     <React.Fragment>
@@ -142,7 +154,15 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
               renderInput={(params) => <TextField {...params} />}
               value={startDate}
               onChange={(newValue) => {
-                setStartDate(newValue!);
+                if (newValue && startDate) {
+                  if (moment(newValue) < moment(dateRange.startDate)) {
+                    setDateRange({
+                      startDate: newValue!,
+                      endDate: dateRange.endDate,
+                    });
+                  }
+                  setStartDate(newValue!);
+                }
               }}
             />
           </LocalizationProvider>
@@ -154,7 +174,15 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
               renderInput={(params) => <TextField {...params} />}
               value={endDate}
               onChange={(newValue) => {
-                setEndDate(newValue!);
+                if (newValue && endDate) {
+                  if (moment(newValue) > moment(dateRange.endDate)) {
+                    setDateRange({
+                      startDate: dateRange.startDate,
+                      endDate: newValue!,
+                    });
+                  }
+                  setEndDate(newValue!);
+                }
               }}
             />
           </LocalizationProvider>
@@ -171,7 +199,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
         <React.Fragment>
           <Typography variant="h5">Total Transactions by Month</Typography>
           <TimeSeriesChart
-            timeData={txsData}
+            timeData={currTxsData}
             yAxisLabel="Total Transactions"
           ></TimeSeriesChart>
         </React.Fragment>
@@ -180,7 +208,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
             Difficulty by Month (in Trillion)
           </Typography>
           <TimeSeriesChart
-            timeData={difficultyData}
+            timeData={currDifficultyData}
             yAxisLabel="Difficulty"
           ></TimeSeriesChart>
         </React.Fragment>
@@ -189,7 +217,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
             Total BTC Mined by Year
           </Typography>
           <TimeSeriesChart
-            timeData={btcMinedData}
+            timeData={currBTCMinedData}
             yAxisLabel="Total BTC Mined"
           ></TimeSeriesChart>
         </React.Fragment>

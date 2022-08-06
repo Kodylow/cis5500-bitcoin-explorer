@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.get("/txsovertime", dashboardController.getTxsOverTime);
 router.get("/btcminedovertime", dashboardController.getBTCMinedOverTime);
-router.get("/diffcultybymonth", dashboardController.getDifficultyDataByMonth);
+router.get("/difficultybymonth", dashboardController.getDifficultyDataByMonth);
 
 export = router;
