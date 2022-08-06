@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import axios, { AxiosResponse } from "axios";
 import pool from "../database/db";
 import { QueryResult } from "pg";
-import moment from 'moment';
+import moment from "moment";
 
 // helper function that returns maximum height of bitcoin blockchain (used in couple controllers)
 const currMaxBlock = async () => {
@@ -125,7 +125,11 @@ const getBlock = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 // getting a single block by height
-const getBlockByHeight = async (req: Request, res: Response, next: NextFunction) => {
+const getBlockByHeight = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // get the block hash from the req
   let height: number = Number(req.params.height);
 
@@ -176,7 +180,11 @@ const getBlockTxs = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-const postBlockByHeights = async (req: Request, res: Response, next: NextFunction) => {
+const postBlockByHeights = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let { startHeight, endHeight } = req.query;
   try {
     if (startHeight && endHeight) {
@@ -198,29 +206,31 @@ const postBlockByHeights = async (req: Request, res: Response, next: NextFunctio
               (hash, height, version, prev_block_hash, merkle_root, timestamp, median_time
                 , bits, nonce, size, weight, num_tx, difficulty, confirmations)
             VALUES
-              ('${block['id']}', ${block['height']}, ${block['version']}, '${block['previousblockhash']}'
-              , '${block['merkle_root']}', '${moment.unix(block['timestamp']).format('YYYY-MM-DD HH:mm:ss')}', ${block['mediantime']}
-              , '${block['bits'].toString(16)}', ${block['nonce']}, ${block['size']}, ${block['weight']}
-              , ${block['tx_count']}, ${block['difficulty']}, NULL)`;
+              ('${block["id"]}', ${block["height"]}, ${block["version"]}, '${
+          block["previousblockhash"]
+        }'
+              , '${block["merkle_root"]}', '${moment
+          .unix(block["timestamp"])
+          .format("YYYY-MM-DD HH:mm:ss")}', ${block["mediantime"]}
+              , '${block["bits"].toString(16)}', ${block["nonce"]}, ${
+          block["size"]
+        }, ${block["weight"]}
+              , ${block["tx_count"]}, ${block["difficulty"]}, NULL)`;
 
         let error;
-        pool.query(
-          insert_query, async (err: any, res: any) => {
-            if (err) {
-              error = await err;
-            }
+        pool.query(insert_query, async (err: any, res: any) => {
+          if (err) {
+            error = await err;
           }
-        );
+        });
 
         if (error) break;
-        console.log(error);
       }
     }
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ msg: "Something bad has occurred." });;
+    res.status(500).json({ msg: "Something bad has occurred." });
   }
-}
+};
 
 export default {
   getBlocks,
@@ -228,5 +238,5 @@ export default {
   getBlock,
   getBlockTxs,
   getBlockByHeight,
-  postBlockByHeights
+  postBlockByHeights,
 };
