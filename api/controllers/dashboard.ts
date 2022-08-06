@@ -99,10 +99,89 @@ export const getDifficultyDataByMonth = async (
   });
 };
 
+export const getAvgWeight = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let { startDate, endDate } = req.query;
+
+  // query to get avg weight
+  const avg_weight_query = `
+    select
+      ROUND(avg(bh.weight)) as "value"
+    from
+      bitcoin.block_headers AS bh
+    WHERE
+      bh.timestamp BETWEEN '${startDate}'  AND '${endDate}'
+  `;
+
+  let pgResult: QueryResult<any> = await pool.query(avg_weight_query);
+  let avgWeightData: any[] = pgResult.rows;
+
+  return res.status(200).json({
+    message: avgWeightData,
+  });
+};
+
+export const getAvgTxs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let { startDate, endDate } = req.query;
+
+  // query to get average transactions
+  const avg_txs_query = `
+    select
+      ROUND(avg(bh.num_tx)) as "value"
+    from
+      bitcoin.block_headers AS bh
+    WHERE
+      bh.timestamp BETWEEN '${startDate}'  AND '${endDate}'
+  `;
+
+  let pgResult: QueryResult<any> = await pool.query(avg_txs_query);
+  let avgTxData: any[] = pgResult.rows;
+
+  return res.status(200).json({
+    message: avgTxData,
+  });
+};
+
+export const getAvgDifficulty = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let { startDate, endDate } = req.query;
+
+  // query to get avg difficulty given a time range
+  // divided by trillion (the size of difficulty is too large to display unless divided here)
+  const avg_difficulty_query = `
+    select
+      ROUND(avg(bh.difficulty) / 1000000000000)  as "value"
+    from
+      bitcoin.block_headers AS bh
+    WHERE
+      bh.timestamp BETWEEN '${startDate}'  AND '${endDate}'
+  `;
+
+  let pgResult: QueryResult<any> = await pool.query(avg_difficulty_query);
+  let avgDifficultyData: any[] = pgResult.rows;
+
+  return res.status(200).json({
+    message: avgDifficultyData,
+  });
+};
+
 
 
 export default {
   getTxsOverTime,
   getBTCMinedOverTime,
-  getDifficultyDataByMonth
+  getDifficultyDataByMonth,
+  getAvgWeight,
+  getAvgTxs,
+  getAvgDifficulty
 }

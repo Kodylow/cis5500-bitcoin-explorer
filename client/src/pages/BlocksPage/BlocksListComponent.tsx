@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
-import blockImg from "./cropped_block.png";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import blockImg from "./block-arrow.png";
 import { BlockHeader } from "./BlocksTypes";
 import {
   List,
