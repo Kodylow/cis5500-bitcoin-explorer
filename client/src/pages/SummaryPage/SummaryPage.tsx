@@ -1,5 +1,6 @@
 import React from "react";
 import TimeSeriesChart from './TimeSeriesChart';
+import IndicatorChart from './IndicatorChart';
 import {
   Grid,
   TextField,
@@ -7,7 +8,7 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DataOverTime } from './DataTypes';
+import { DataOverTime, SingleValue } from './DataTypes';
 import moment from 'moment'
 
 export interface IDashboardPageProps {}
@@ -16,11 +17,44 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
   const [txsData, setTxsOverTime] = React.useState<Array<DataOverTime>  | undefined>([]);
   const [difficultyData, setDifficultyData] = React.useState<Array<DataOverTime> | undefined>([]);
   const [btcMinedData, setBTCMinedOverTime] =  React.useState<Array<DataOverTime> | undefined>([]);
+  const [weightData, setWeightData] = React.useState<SingleValue | undefined>();
+  const [avgTxsData, setAvgTxsData] = React.useState<SingleValue | undefined>();
+  const [avgDifficultyData, setAvgDifficultyData] = React.useState<SingleValue | undefined>();
 
   let initalStartDate: Date = new Date("2015-01-01");
   let initalEndDate: Date = new Date();
   const [startDate, setStartDate] = React.useState<Date | undefined>(initalStartDate);
   const [endDate, setEndDate] = React.useState<Date | undefined>(initalEndDate);
+
+  React.useEffect(() => {
+    (async () => {
+      setWeightData(undefined);
+      const res = await (
+        await fetch("http://www.localhost:5010/dashboard/getavgweight?startDate=" + moment(startDate).format("YYYY-MM-DD") + "&endDate=" + moment(endDate).format("YYYY-MM-DD"))
+      ).json();
+      setWeightData(res.message[0]);
+    })();
+  }, [startDate, endDate]);
+
+  React.useEffect(() => {
+    (async () => {
+      setAvgTxsData(undefined);
+      const res = await (
+        await fetch("http://www.localhost:5010/dashboard/getavgtxs?startDate=" + moment(startDate).format("YYYY-MM-DD") + "&endDate=" + moment(endDate).format("YYYY-MM-DD"))
+      ).json();
+      setAvgTxsData(res.message[0]);
+    })();
+  }, [startDate, endDate]);
+
+  React.useEffect(() => {
+    (async () => {
+      setAvgDifficultyData(undefined);
+      const res = await (
+        await fetch("http://www.localhost:5010/dashboard/getavgdifficulty?startDate=" + moment(startDate).format("YYYY-MM-DD") + "&endDate=" + moment(endDate).format("YYYY-MM-DD"))
+      ).json();
+      setAvgDifficultyData(res.message[0]);
+    })();
+  }, [startDate, endDate]);
 
   React.useEffect(() => {
     (async () => {
@@ -109,6 +143,11 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
         <Grid item/>
       </Grid>
 
+      <Grid container sx={{mt: '3rem', 'mb': '3rem', display: 'flex', justifyContent: 'space-around', 'mr': 'auto', 'ml': 'auto'}} width="90%">
+        <IndicatorChart data={weightData} measureName="Average Weight per Block" />
+        <IndicatorChart data={avgTxsData} measureName="Average Transactions per Block" />
+        <IndicatorChart data={avgDifficultyData} measureName="Average Difficult per Block (in Trillions)" />
+      </Grid>
       <Grid container sx={{mt: '3rem', display: 'flex', flexDirection: 'column'}} spacing={0} alignItems="center">
         <React.Fragment>
           <Typography variant="h5">Total Transactions by Month</Typography>

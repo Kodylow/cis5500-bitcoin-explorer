@@ -82,7 +82,7 @@ export const getDifficultyDataByMonth = async (
   const difficulty_over_time_query = `
     select
       date_trunc('month', bh.timestamp::date)::date as "date"
-      , sum(bh.difficulty) / 1000000000000 as "value"
+      , ROUND(sum(bh.difficulty) / 1000000000000) as "value"
     from
       bitcoin.block_headers AS bh
     WHERE
@@ -100,9 +100,94 @@ export const getDifficultyDataByMonth = async (
 };
 
 
+export const getAvgWeight = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let { startDate, endDate } = req.query;
+
+  // query to get difficulty by month
+  // divided by trillion (the size of difficulty is too large to display unless divided here)
+  const avg_weight_query = `
+    select
+      ROUND(avg(bh.weight)) as "value"
+    from
+      bitcoin.block_headers AS bh
+    WHERE
+      bh.timestamp BETWEEN '${startDate}'  AND '${endDate}'
+  `;
+
+  // get data for a specific block header
+  let pgResult: QueryResult<any> = await pool.query(avg_weight_query);
+  let avgWeightData: any[] = pgResult.rows;
+
+  return res.status(200).json({
+    message: avgWeightData,
+  });
+};
+
+export const getAvgTxs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let { startDate, endDate } = req.query;
+
+  // query to get difficulty by month
+  // divided by trillion (the size of difficulty is too large to display unless divided here)
+  const avg_txs_query = `
+    select
+      ROUND(avg(bh.num_tx)) as "value"
+    from
+      bitcoin.block_headers AS bh
+    WHERE
+      bh.timestamp BETWEEN '${startDate}'  AND '${endDate}'
+  `;
+
+  // get data for a specific block header
+  let pgResult: QueryResult<any> = await pool.query(avg_txs_query);
+  let avgTxData: any[] = pgResult.rows;
+
+  return res.status(200).json({
+    message: avgTxData,
+  });
+};
+
+export const getAvgDifficulty = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let { startDate, endDate } = req.query;
+
+  // query to get difficulty by month
+  // divided by trillion (the size of difficulty is too large to display unless divided here)
+  const avg_difficulty_query = `
+    select
+      ROUND(avg(bh.difficulty) / 1000000000000)  as "value"
+    from
+      bitcoin.block_headers AS bh
+    WHERE
+      bh.timestamp BETWEEN '${startDate}'  AND '${endDate}'
+  `;
+
+  // get data for a specific block header
+  let pgResult: QueryResult<any> = await pool.query(avg_difficulty_query);
+  let avgDifficultyData: any[] = pgResult.rows;
+
+  return res.status(200).json({
+    message: avgDifficultyData,
+  });
+};
+
+
 
 export default {
   getTxsOverTime,
   getBTCMinedOverTime,
-  getDifficultyDataByMonth
+  getDifficultyDataByMonth,
+  getAvgWeight,
+  getAvgTxs,
+  getAvgDifficulty
 }
