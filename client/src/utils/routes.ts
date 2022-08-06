@@ -1,11 +1,12 @@
 // pages
 import BlocksPage from "../pages/BlocksPage/BlocksPage";
-import UTXOsPage from "../pages/UTXOsPage/UTXOsPage";
-import TXIDsPage from "../pages/DetailsPage/TXDetailsPage";
+
 import SummaryPage from "../pages/SummaryPage/SummaryPage";
 
 // other
 import { FC } from "react";
+import KYCAddressesPage from "../pages/KYCAddressesPage/KYCAddressesPage";
+import CoinbaseTXsPage from "../pages/CoinbaseTXsPage/CoinbaseTXsPage";
 
 // interface
 interface Route {
@@ -32,11 +33,18 @@ export const routes: Array<Route> = [
     component: BlocksPage,
   },
   {
-    key: "utxos-route",
-    title: "UTXOs",
-    path: "/utxos",
+    key: "kycaddresses-route",
+    title: "KYCAddresses",
+    path: "/kycaddresses",
     enabled: true,
-    component: UTXOsPage,
+    component: KYCAddressesPage,
+  },
+  {
+    key: "coinbasetxs-route",
+    title: "Coinbase TXs",
+    path: "/coinbasetxs",
+    enabled: true,
+    component: CoinbaseTXsPage,
   },
   // {
   //   key: "txids-route",

@@ -3,7 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import BlocksPage from "./pages/BlocksPage/BlocksPage";
-import UTXOsPage from "./pages/UTXOsPage/UTXOsPage";
+import KYCAddressesPage from "./pages/KYCAddressesPage/KYCAddressesPage";
+import CoinbaseTXsPage from "./pages/CoinbaseTXsPage/CoinbaseTXsPage";
 import TXDetailsPage from "./pages/DetailsPage/TXDetailsPage";
 import AddressDetailsPage from "./pages/DetailsPage/AddressDetailsPage";
 import { CssBaseline } from "@mui/material";
@@ -24,8 +25,9 @@ const App: React.FC<IAppProps> = (props) => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<SummaryPage />} />
-            <Route path="/UTXOs" element={<UTXOsPage />} />
             <Route path="/blocks" element={<BlocksPage />} />
+            <Route path="/kycaddresses" element={<KYCAddressesPage />} />
+            <Route path="/coinbasetxs" element={<CoinbaseTXsPage />} />
             <Route path="/tx/:txid" element={<TXDetailsPage />} />
             <Route path="/address/:address" element={<AddressDetailsPage />} />
           </Route>

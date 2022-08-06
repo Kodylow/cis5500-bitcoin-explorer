@@ -13,7 +13,6 @@ import BlockTxsComponent from "./BlockTxsComponent";
 import BlockHeaderInfoComponent from "./BlockHeaderInfoComponent";
 import blockImg from "./block.png";
 import axios from "axios";
-//lkjsdf
 
 export interface IBlocksPageProps {}
 
