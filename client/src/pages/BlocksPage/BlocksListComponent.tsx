@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
-import blockImg from "./block.png";
+import blockImg from "./cropped_block.png";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { BlockHeader } from "./BlocksTypes";
 import {
   List,
@@ -10,7 +11,7 @@ import {
   ListItemText,
   Box,
 } from "@mui/material";
-import moment from 'moment';
+import moment from "moment";
 
 export interface IProps {
   block: BlockHeader | undefined;
@@ -38,38 +39,50 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
         maxWidth: 360,
         bgcolor: "background.paper",
         overflow: "auto",
-        position: 'sticky',
-        top: '.25rem',
+        position: "sticky",
+        top: ".25rem",
       }}
     >
       {blockheaders ? (
         <React.Fragment>
           {blockheaders.map((blockheader) => (
             <ListItem
-              onClick={() => setBlock(blockheader)}
-              sx={{
-                "&:hover": {
-                  backgroundColor: "primary.main",
-                  cursor: "pointer",
-                },
-              }}
+              onClick={
+                blockheader.hash !== block?.hash
+                  ? () => setBlock(blockheader)
+                  : undefined
+              }
+              sx={
+                blockheader.hash === block?.hash
+                  ? { backgroundColor: "primary.main" }
+                  : {
+                      "&:hover": {
+                        backgroundColor: "primary.main",
+                        cursor: "pointer",
+                      },
+                    }
+              }
               key={blockheader.hash}
             >
               <ListItemAvatar>
-                <Box
-                  component="img"
-                  sx={{
-                    height: "50px",
-                    width: "auto",
-                    mr: ".55rem",
-                  }}
-                  alt="Block img"
-                  src={blockImg}
-                />
+                <div>
+                  <Box
+                    component="img"
+                    sx={{
+                      height: "50px",
+                      width: "auto",
+                      mr: ".55rem",
+                    }}
+                    alt="Block img"
+                    src={blockImg}
+                  />
+                </div>
               </ListItemAvatar>
               <ListItemText
                 primary={blockheader.height}
-                secondary={moment(blockheader.timestamp).format("YYYY-MM-DD HH:mm:ss")}
+                secondary={moment(blockheader.timestamp).format(
+                  "YYYY-MM-DD HH:mm:ss"
+                )}
               />
             </ListItem>
           ))}

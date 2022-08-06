@@ -32,8 +32,9 @@ const TXDetailsPage: React.FC<IProps> = () => {
   const createTree = (transaction: Transaction) => {
     const name = transaction.txid;
     const children = transaction.vin.map((vin: any) => {
+      console.log(vin);
       return {
-        name: vin.prevout.scriptpubkey_address,
+        name: vin["prevout"]["scriptpubkey_address"],
       };
     });
     return {
