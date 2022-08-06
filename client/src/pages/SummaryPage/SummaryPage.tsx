@@ -26,6 +26,10 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
   const [startDate, setStartDate] = React.useState<Date | undefined>(initalStartDate);
   const [endDate, setEndDate] = React.useState<Date | undefined>(initalEndDate);
 
+  // https://newdevzone.com/posts/how-to-get-all-the-data-with-promiseall-in-the-useeffect-hook
+
+
+
   React.useEffect(() => {
     (async () => {
       setWeightData(undefined);
