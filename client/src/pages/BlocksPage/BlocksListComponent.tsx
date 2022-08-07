@@ -2,6 +2,8 @@ import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
 import blockImg from "./block-arrow.png";
 import { BlockHeader } from "./BlocksTypes";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import { BlockHeader } from "../../types/BitcoinTypes";
 import {
   List,
   ListItem,

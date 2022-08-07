@@ -8,15 +8,14 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { Transaction } from "./BlocksTypes";
-import React from 'react';
+import { Transaction } from "../../types/BitcoinTypes";
+import React from "react";
 
 export interface IProps {
   transaction: Transaction | undefined;
 }
 
 const TransactionHeaderInfoComponent: React.FC<IProps> = ({ transaction }) => {
-
   // sx={{backgroundColor: '#111316'}}
   // sx={{backgroundColor: '#24273d'}}
   // #15181b
@@ -24,12 +23,15 @@ const TransactionHeaderInfoComponent: React.FC<IProps> = ({ transaction }) => {
 
   return (
     <React.Fragment>
-      <Typography variant="h6" align="left" sx={{opacity: .9, 'mb': '.25rem'}}>
+      <Typography variant="h6" align="left" sx={{ opacity: 0.9, mb: ".25rem" }}>
         Transaction Headers
       </Typography>
-      <Card sx={{backgroundColor: '#24273d', opacity: .8}}>
+      <Card sx={{ backgroundColor: "#24273d", opacity: 0.8 }}>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 350, backgroundColor: '#15191d'}} aria-label="simple table">
+          <Table
+            sx={{ minWidth: 350, backgroundColor: "#15191d" }}
+            aria-label="simple table"
+          >
             {transaction ? (
               <TableBody>
                 <TableRow
@@ -38,9 +40,7 @@ const TransactionHeaderInfoComponent: React.FC<IProps> = ({ transaction }) => {
                   <TableCell component="th" scope="row">
                     Version
                   </TableCell>
-                  <TableCell  align="right">
-                    {transaction['version']}
-                  </TableCell>
+                  <TableCell align="right">{transaction["version"]}</TableCell>
                 </TableRow>
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -48,9 +48,7 @@ const TransactionHeaderInfoComponent: React.FC<IProps> = ({ transaction }) => {
                   <TableCell component="th" scope="row">
                     Locktime
                   </TableCell>
-                  <TableCell  align="right">
-                    {transaction['locktime']}
-                  </TableCell>
+                  <TableCell align="right">{transaction["locktime"]}</TableCell>
                 </TableRow>
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -58,9 +56,7 @@ const TransactionHeaderInfoComponent: React.FC<IProps> = ({ transaction }) => {
                   <TableCell component="th" scope="row">
                     Size
                   </TableCell>
-                  <TableCell  align="right">
-                    {transaction['size']}
-                  </TableCell>
+                  <TableCell align="right">{transaction["size"]}</TableCell>
                 </TableRow>
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -68,9 +64,7 @@ const TransactionHeaderInfoComponent: React.FC<IProps> = ({ transaction }) => {
                   <TableCell component="th" scope="row">
                     Weight
                   </TableCell>
-                  <TableCell  align="right">
-                    {transaction['weight']}
-                  </TableCell>
+                  <TableCell align="right">{transaction["weight"]}</TableCell>
                 </TableRow>
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -78,17 +72,15 @@ const TransactionHeaderInfoComponent: React.FC<IProps> = ({ transaction }) => {
                   <TableCell component="th" scope="row">
                     Fee
                   </TableCell>
-                  <TableCell  align="right">
-                    {transaction['fee']}
-                  </TableCell>
+                  <TableCell align="right">{transaction["fee"]}</TableCell>
                 </TableRow>
               </TableBody>
-            ) : null }
+            ) : null}
           </Table>
         </TableContainer>
       </Card>
     </React.Fragment>
-  )
-}
+  );
+};
 
 export default TransactionHeaderInfoComponent;
