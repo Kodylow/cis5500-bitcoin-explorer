@@ -239,7 +239,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
       <Grid container sx={{mt: '3rem', 'mb': '3rem', display: 'flex', justifyContent: 'space-around', 'mr': 'auto', 'ml': 'auto'}} width="90%">
         <IndicatorChart data={avgWeightData} measureName="Average Weight per Block" />
         <IndicatorChart data={avgTxsData} measureName="Average Transactions per Block" />
-        <IndicatorChart data={avgDifficultyData} measureName="Average Difficult per Block (in Trillions)" />
+        <IndicatorChart data={avgDifficultyData} measureName="Average Difficulty per Block (in Trillions)" />
       </Grid>
       <Grid
         container
