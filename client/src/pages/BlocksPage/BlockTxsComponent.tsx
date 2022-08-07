@@ -17,12 +17,12 @@ const BlockTxsComponent: React.FC<IProps> = ({ txids, page }) => {
             height: "60vh",
             bgcolor: "background.paper",
             overflow: "auto",
-            mt: '1rem',
+            mt: '1rem'
           }}
         >
           {txids.map((txid, index) => {
-            return (
-              <ListItem key={txid}>
+              return (
+              <ListItem key={txid} >
                 <CollapsableTransaction
                   index={index + (page - 1) * 25}
                   txid={txid}

@@ -95,7 +95,7 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         <Card sx={{ m: 2 }}>
           <CardContent>
             <Typography variant="h5" sx={{'mb': '1rem'}}>Transactions in Block</Typography>
-            <Pagination
+              <Pagination
               count={Math.ceil(txids.length / 25)}
               color="primary"
               page={page}
@@ -104,7 +104,7 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
                 setPageTXs([...txids.slice((value - 1) * 25, value * 25)]);
               }}
             />
-            <BlockTxsComponent txids={pageTXs} page={page}/>
+          <BlockTxsComponent txids={pageTXs} page={page}/>
           </CardContent>
         </Card>
       </Grid>

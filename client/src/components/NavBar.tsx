@@ -93,7 +93,7 @@ const Navbar: FC = (): ReactElement => {
                   key={page.key}
                   component={NavLink}
                   to={page.path}
-                  color="black"
+                  color="white"
                   underline="none"
                   variant="button"
                 >
