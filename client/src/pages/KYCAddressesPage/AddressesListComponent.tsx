@@ -1,7 +1,5 @@
 import React from 'react'
 import { Dispatch, SetStateAction } from "react";
-import blockImg from "./cropped_block.png";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { Address } from "./AddressesTypes";
 import {
   List,
@@ -25,7 +23,7 @@ const AddressesListComponent: React.FC<IProps>  = ({address, setAddress}) => {
     React.useEffect(() => {
         (
             async () => {
-                const res = await ( await fetch("http://www.localhost:5010/addresses/")).json();
+                const res = await ( await fetch("http://www.localhost:5010/address/addresses")).json();
                 setAddresses([...res.message]);
             }
         )();
@@ -62,20 +60,6 @@ const AddressesListComponent: React.FC<IProps>  = ({address, setAddress}) => {
               }
               key={address.address}
             >
-              <ListItemAvatar>
-                <div>
-                  <Box
-                    component="img"
-                    sx={{
-                      height: "50px",
-                      width: "auto",
-                      mr: ".55rem",
-                    }}
-                    alt="Block img"
-                    src={blockImg}
-                  />
-                </div>
-              </ListItemAvatar>
               <ListItemText
                 primary={address.address}
                 secondary={address.txid}

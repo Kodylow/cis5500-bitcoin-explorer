@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React from 'react'
 import AddressesListComponent from "./AddressesListComponent";
+import AddressTxsComponent from "./AddressTxsComponent";
 import { Address } from "./AddressesTypes";
 type Props = {}
 
@@ -20,10 +21,20 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
   const [txids, setTxids] = React.useState<Array<string>>([]);
 
   React.useEffect(() => {
-    async () => {
-      
+    if (address !== undefined) {
+      (async () => {
+        const url = `https://blockstream.info/api/address/${address}/txs`;
+        let res = await fetch(url);
+        let data = await res.json();
+        setTxids([...data.message]);
+        setPageTXs([...data.message.slice(0, 25)]);
+      })();
+    } else {
+      setTxids([]);
     }
-  })
+  }, [address]);
+
+
   return (
     <Grid container spacing={1}>
       <Grid item xs={2}>
@@ -45,6 +56,23 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
             {address ? "Block " + address.address : "Loading..."}
           </Typography>
         </Box>
+        <Card sx={{ m: 2 }}>
+          <CardContent>
+            <Typography variant="h5" sx={{ mb: "1rem" }}>
+              Transactions in Block
+            </Typography>
+            <Pagination
+              count={Math.ceil(txids.length / 25)}
+              color="primary"
+              page={page}
+              onChange={(event, value) => {
+                setPage(value);
+                setPageTXs([...txids.slice((value - 1) * 25, value * 25)]);
+              }}
+            />
+            <AddressTxsComponent txids={pageTXs} page={page} />
+          </CardContent>
+        </Card>
       </Grid>
     </Grid>
   )
