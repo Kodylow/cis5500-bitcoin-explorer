@@ -4,5 +4,6 @@ const router = express.Router();
 
 router.get("/:address", addressController.getAddress);
 router.get("/:address/txs", addressController.getAddressTxs);
+router.get('/addresses', addressController.getAddresses)
 
 export = router;

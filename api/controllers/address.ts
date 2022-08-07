@@ -1,5 +1,25 @@
 import { Request, Response, NextFunction } from "express";
 import axios, { AxiosResponse } from "axios";
+import { QueryResult } from "pg";
+import pool from "../database/db";
+//import KYCAddressesPage from "../../client/src/pages/KYCAddressesPage/KYCAddressesPage";
+
+// Get all addresses
+const getAddresses = async (req: Request, res: Response, next: NextFunction) => {
+  const all_addresses_query = `
+    SELECT
+      txid,
+      address
+    FROM
+      bitcoin.txidaddress
+  `
+  let pgResult: QueryResult<any> = await pool.query(all_addresses_query);
+  let addresses: any[] =pgResult.rows;
+
+  return res.status(200).json({
+    message: addresses,
+  });
+}
 
 // Get address level data (i.e. funded_txo_count)
 const getAddress = async (req: Request, res: Response, next: NextFunction) => {
@@ -33,4 +53,4 @@ const getAddressTxs = async (req: Request, res: Response, next: NextFunction) =>
   });
 };
 
-export default { getAddress, getAddressTxs };
+export default { getAddress, getAddressTxs, getAddresses };
