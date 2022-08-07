@@ -6,16 +6,15 @@ import pool from "../database/db";
 
 // Get all addresses
 const getAddresses = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("here")
   const all_addresses_query = `
     SELECT
-      txid,
-      address
+      DISTINCT address
     FROM
       bitcoin.txidaddress
   `
   let pgResult: QueryResult<any> = await pool.query(all_addresses_query);
   let addresses: any[] =pgResult.rows;
-
   return res.status(200).json({
     message: addresses,
   });

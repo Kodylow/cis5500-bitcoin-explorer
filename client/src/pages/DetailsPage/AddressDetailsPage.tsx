@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Transaction } from "../BlocksPage/BlocksTypes";
+import { Transaction } from "../../types/BitcoinTypes";
 import { Tree } from "react-tree-graph";
 import "./styles.css";
 

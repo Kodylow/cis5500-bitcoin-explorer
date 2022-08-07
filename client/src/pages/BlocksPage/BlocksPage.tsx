@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import BlocksListComponent from "./BlocksListComponent";
-import { BlockHeader } from "./BlocksTypes";
+import { BlockHeader } from "../../types/BitcoinTypes";
 import BlockTxsComponent from "./BlockTxsComponent";
 import BlockHeaderInfoComponent from "./BlockHeaderInfoComponent";
 import blockImg from "./block.png";
@@ -26,16 +26,24 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   React.useEffect(() => {
     (async () => {
       // To compare the current height in database with esplora current height
-      let esploraMaxHeight =  await (await fetch('https://blockstream.info/api/blocks/tip/height')).json();
-      let currMaxHeight = await (await fetch("http://www.localhost:5010/blockheaders/height")).json();
+      let esploraMaxHeight = await (
+        await fetch("https://blockstream.info/api/blocks/tip/height")
+      ).json();
+      let currMaxHeight = await (
+        await fetch("http://www.localhost:5010/blockheaders/height")
+      ).json();
       let parsedHeight = currMaxHeight.message[0].height;
-      const res = await (await fetch(`http://www.localhost:5010/blockheaders/${parsedHeight}`)).json();
+      const res = await (
+        await fetch(`http://www.localhost:5010/blockheaders/${parsedHeight}`)
+      ).json();
       const data: BlockHeader = res.message[0];
       setBlock(data);
 
       // Load missing blocks
       if (esploraMaxHeight > parsedHeight) {
-        await axios.post(`http://www.localhost:5010/blockheaders?startHeight=${parsedHeight}&endHeight=${esploraMaxHeight}`);
+        await axios.post(
+          `http://www.localhost:5010/blockheaders?startHeight=${parsedHeight}&endHeight=${esploraMaxHeight}`
+        );
       }
     })();
   }, []);
@@ -93,7 +101,9 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         <BlockHeaderInfoComponent block={block} />
         <Card sx={{ m: 2 }}>
           <CardContent>
-            <Typography variant="h5" sx={{'mb': '1rem'}}>Transactions in Block</Typography>
+            <Typography variant="h5" sx={{ mb: "1rem" }}>
+              Transactions in Block
+            </Typography>
             <Pagination
               count={Math.ceil(txids.length / 25)}
               color="primary"
@@ -103,7 +113,7 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
                 setPageTXs([...txids.slice((value - 1) * 25, value * 25)]);
               }}
             />
-            <BlockTxsComponent txids={pageTXs} page={page}/>
+            <BlockTxsComponent txids={pageTXs} page={page} />
           </CardContent>
         </Card>
       </Grid>

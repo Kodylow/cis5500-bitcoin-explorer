@@ -9,7 +9,7 @@ export interface BlockHeader {
   difficulty: number;
   confirmations: number;
   nonce: number;
-  bits: number
+  bits: number;
 }
 
 export interface Transaction {
