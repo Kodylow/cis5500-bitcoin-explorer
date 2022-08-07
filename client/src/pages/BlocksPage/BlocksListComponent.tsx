@@ -2,7 +2,7 @@ import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
 import blockImg from "./cropped_block.png";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { BlockHeader } from "./BlocksTypes";
+import { BlockHeader } from "../../types/BitcoinTypes";
 import {
   List,
   ListItem,

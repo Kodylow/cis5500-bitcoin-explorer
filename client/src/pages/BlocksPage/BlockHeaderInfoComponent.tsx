@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { BlockHeader } from "./BlocksTypes";
+import { BlockHeader } from "../../types/BitcoinTypes";
 import moment from "moment";
 
 export interface IProps {

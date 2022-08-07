@@ -9,15 +9,14 @@ export interface IProps {
 
 const BlockTxsComponent: React.FC<IProps> = ({ txids, page }) => {
   return (
-    <Grid sx={{position: 'sticky',
-    top: '0'}}>
+    <Grid sx={{ position: "sticky", top: "0" }}>
       {txids.length ? (
         <List
           sx={{
             height: "60vh",
             bgcolor: "background.paper",
             overflow: "auto",
-            mt: '1rem',
+            mt: "1rem",
           }}
         >
           {txids.map((txid, index) => {
