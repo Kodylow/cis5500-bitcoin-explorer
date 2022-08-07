@@ -6,7 +6,6 @@ import pool from "../database/db";
 
 // Get all addresses
 const getAddresses = async (req: Request, res: Response, next: NextFunction) => {
-  console.log("here")
   const all_addresses_query = `
     SELECT
       DISTINCT address
@@ -17,6 +16,22 @@ const getAddresses = async (req: Request, res: Response, next: NextFunction) => 
   let addresses: any[] =pgResult.rows;
   return res.status(200).json({
     message: addresses,
+  });
+}
+
+//Get first address
+const getFirstAddress = async (req: Request, res: Response, next: NextFunction) => {
+  const first_address_query = `
+    SELECT
+      DISTINCT address
+    FROM
+      bitcoin.txidaddress
+    LIMIT 1
+  `
+  let pgResult: QueryResult<any> = await pool.query(first_address_query);
+  let top_address: any[] =pgResult.rows;
+  return res.status(200).json({
+    message: top_address,
   });
 }
 
@@ -52,4 +67,4 @@ const getAddressTxs = async (req: Request, res: Response, next: NextFunction) =>
   });
 };
 
-export default { getAddress, getAddressTxs, getAddresses };
+export default { getAddress, getAddressTxs, getAddresses, getFirstAddress };

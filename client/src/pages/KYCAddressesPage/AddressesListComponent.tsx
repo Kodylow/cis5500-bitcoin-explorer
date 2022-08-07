@@ -62,7 +62,6 @@ const AddressesListComponent: React.FC<IProps>  = ({address, setAddress}) => {
             >
               <ListItemText
                 primary={address.address}
-                secondary={address.txid}
               />
             </ListItem>
           ))}

@@ -9,6 +9,7 @@ import {
 import React from 'react'
 import AddressesListComponent from "./AddressesListComponent";
 import AddressTxsComponent from "./AddressTxsComponent";
+import AddressInfoComponent from "./AddressInfoComponent";
 import { Address } from "./AddressesTypes";
 type Props = {}
 
@@ -19,6 +20,17 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
   const [page, setPage] = React.useState(1);
   const [pageTXs, setPageTXs] = React.useState<Array<string>>([]);
   const [txids, setTxids] = React.useState<Array<string>>([]);
+
+  // Set the initial address to the first address
+  React.useEffect(() => {
+    (async () => {
+      const res = await (
+        await fetch(`http://www.localhost:5010/address/topaddress`)
+      ).json();
+      const data: Address = res.message[0];
+      setAddress(data);
+    })();
+  }, []);
 
   React.useEffect(() => {
     if (address !== undefined) {
@@ -53,13 +65,14 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
           }}
         >
           <Typography variant="h3" align="center" alignItems="center">
-            {address ? "Block " + address.address : "Loading..."}
+            {address ? address.address : "Loading..."}
           </Typography>
         </Box>
+        <AddressInfoComponent address={address} />
         <Card sx={{ m: 2 }}>
           <CardContent>
             <Typography variant="h5" sx={{ mb: "1rem" }}>
-              Transactions in Block
+              Address Transactions
             </Typography>
             <Pagination
               count={Math.ceil(txids.length / 25)}
