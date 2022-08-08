@@ -41,15 +41,15 @@ const AddressesListComponent: React.FC<IProps>  = ({address, setAddress}) => {
     >
       {addresses ? (
         <React.Fragment>
-          {addresses.map((address) => (
+          {addresses.map((addr) => (
             <ListItem
               onClick={
-                address.address !== address?.address
-                  ? () => setAddress(address)
+                addr.address !== address?.address
+                  ? () => setAddress(addr)
                   : undefined
               }
               sx={
-                address.address === address?.address
+                addr.address === address?.address
                   ? { backgroundColor: "primary.main" }
                   : {
                       "&:hover": {
@@ -58,10 +58,10 @@ const AddressesListComponent: React.FC<IProps>  = ({address, setAddress}) => {
                       },
                     }
               }
-              key={address.address}
+              key={addr.address}
             >
               <ListItemText
-                primary={address.address}
+                primary={addr.address}
               />
             </ListItem>
           ))}

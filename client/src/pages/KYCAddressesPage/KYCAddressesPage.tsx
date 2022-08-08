@@ -35,7 +35,7 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
   React.useEffect(() => {
     if (address !== undefined) {
       (async () => {
-        const url = `https://blockstream.info/api/address/${address}/txs`;
+        const url = `http://www.localhost:5010/${address}/txs`;
         let res = await fetch(url);
         let data = await res.json();
         setTxids([...data.message]);
