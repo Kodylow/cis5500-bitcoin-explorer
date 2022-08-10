@@ -43,9 +43,14 @@ const TXDetailsPage: React.FC<IProps> = () => {
     const name = transaction.txid;
     const children = transaction.vin.map((vin: any) => {
       console.log(vin);
-      return {
-        name: vin["prevout"]["scriptpubkey_address"],
-      };
+      try {
+          return {
+            name: vin["prevout"]["scriptpubkey_address"],
+          };
+      }
+      catch (err) {
+          return [];
+      }
     });
     return {
       name,
@@ -113,7 +118,6 @@ const TXDetailsPage: React.FC<IProps> = () => {
                                                       </TableCell>
                                                       <TableCell align="right">{tx["fee"]}</TableCell>
                                                   </TableRow>
-
                                                   <TableRow>
                                                       <TableCell component="th" scope="row">
                                                           Inputs
