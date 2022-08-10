@@ -35,6 +35,26 @@ const getFirstAddress = async (req: Request, res: Response, next: NextFunction) 
   });
 }
 
+
+//Get address txids
+const getTxids = async (req: Request, res: Response, next: NextFunction) => {
+  let address: string = String(req.params.address);
+  const txs_query = `
+    SELECT
+      txid
+    FROM
+      bitcoin.txidaddress
+    WHERE address = '${address}'
+  `
+  let pgResult: QueryResult<any> = await pool.query(txs_query);
+  let txids: any[] = []
+   
+  pgResult.rows.forEach(row => {txids.push(row.txid)});
+  return res.status(200).json({
+    message: txids,
+  });
+}
+
 // Get address level data (i.e. funded_txo_count)
 const getAddress = async (req: Request, res: Response, next: NextFunction) => {
   // get the block hash from the req
@@ -67,4 +87,4 @@ const getAddressTxs = async (req: Request, res: Response, next: NextFunction) =>
   });
 };
 
-export default { getAddress, getAddressTxs, getAddresses, getFirstAddress };
+export default { getAddress, getAddressTxs, getAddresses, getFirstAddress, getTxids };

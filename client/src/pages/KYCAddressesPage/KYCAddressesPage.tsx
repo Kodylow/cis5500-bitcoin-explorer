@@ -16,7 +16,7 @@ type Props = {}
 export interface IAddressesPageProps {}
 
 const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
-  const [address, setAddress] = React.useState<Address | undefined>(undefined);
+  const [addr, setAddress] = React.useState<Address | undefined>(undefined);
   const [page, setPage] = React.useState(1);
   const [pageTXs, setPageTXs] = React.useState<Array<string>>([]);
   const [txids, setTxids] = React.useState<Array<string>>([]);
@@ -33,9 +33,9 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
   }, []);
 
   React.useEffect(() => {
-    if (address !== undefined) {
+    if (addr !== undefined) {
       (async () => {
-        const url = `http://www.localhost:5010/${address}/txs`;
+        const url = `http://www.localhost:5010/address/${addr.address}/txids`;
         let res = await fetch(url);
         let data = await res.json();
         setTxids([...data.message]);
@@ -44,13 +44,13 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
     } else {
       setTxids([]);
     }
-  }, [address]);
+  }, [addr]);
 
 
   return (
     <Grid container spacing={1}>
       <Grid item xs={2}>
-        <AddressesListComponent address={address} setAddress={setAddress} />
+        <AddressesListComponent address={addr} setAddress={setAddress} />
       </Grid>
       <Grid item xs={10} sx={{ p: 2 }}>
         <Box
@@ -65,10 +65,10 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
           }}
         >
           <Typography variant="h3" align="center" alignItems="center">
-            {address ? address.address : "Loading..."}
+            {addr ? addr.address : "Loading..."}
           </Typography>
         </Box>
-        <AddressInfoComponent address={address} />
+        <AddressInfoComponent address={addr} />
         <Card sx={{ m: 2 }}>
           <CardContent>
             <Typography variant="h5" sx={{ mb: "1rem" }}>
