@@ -69,13 +69,28 @@ export const getTxDetailsByTxID = async (
   let id: string = String(req.params.id);
   let txDetail: any = await getTxDetails(id);
 
-  console.log("in here");
   return res.status(200).json({
     message: txDetail,
+  });
+};
+
+export const getMerkleProof = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let id: string = String(req.params.id);
+  let proof: any = await axios.get(
+    `https://blockstream.info/api/tx/${id}/merkle-proof`
+  );
+
+  return res.status(200).json({
+    message: proof.data,
   });
 };
 
 export default {
   getTxs,
   getTxDetailsByTxID,
+  getMerkleProof,
 };

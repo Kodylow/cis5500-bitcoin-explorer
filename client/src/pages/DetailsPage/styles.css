@@ -1,6 +1,7 @@
 div.custom-container {
   background-color: #242424;
   padding: 20px;
+  width: 100%;
 }
 
 svg.custom .node circle {
