@@ -40,9 +40,8 @@ const TXDetailsPage: React.FC<IProps> = () => {
 
   React.useEffect(() => {
     const buildMerkleTree = (m: MerkleProof) => {
-      let data = {};
       let h = txid;
-      let name_h = h!.slice(0, 3) + ".." + h!.slice(h!.length - 3);
+      let data = { name: h, children: {} };
       let index = m.pos;
       let inner_node;
       for (const i of m.merkle) {
@@ -50,9 +49,8 @@ const TXDetailsPage: React.FC<IProps> = () => {
         if (index & 1) {
           inner_node = i + h;
           h = hash256(inner_node).toString();
-          name_h = h.slice(0, 3) + ".." + h.slice(h.length - 3);
           data = {
-            name: name_h,
+            name: "",
             children: [
               data,
               {
@@ -63,9 +61,8 @@ const TXDetailsPage: React.FC<IProps> = () => {
         } else {
           inner_node = h + i;
           h = hash256(inner_node).toString();
-          name_h = h.slice(0, 3) + ".." + h.slice(h.length - 3);
           data = {
-            name: name_h,
+            name: "",
             children: [
               {
                 name: name_i,
