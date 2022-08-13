@@ -74,6 +74,26 @@ const TransactionHeaderInfoComponent: React.FC<IProps> = ({ transaction }) => {
                   </TableCell>
                   <TableCell align="right">{transaction["fee"]}</TableCell>
                 </TableRow>
+                <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                    <TableCell component="th" scope="row">
+                        Inputs
+                    </TableCell>
+                    <TableCell align="right">
+                        {transaction['vin'].length}
+                    </TableCell>
+                </TableRow>
+                <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                    <TableCell component="th" scope="row">
+                        Outputs
+                    </TableCell>
+                    <TableCell align="right">
+                        {transaction['vout'].length}
+                    </TableCell>
+                </TableRow>
               </TableBody>
             ) : null}
           </Table>

@@ -8,14 +8,12 @@ import {
   MenuItem,
   Toolbar,
   Typography,
-  Paper,
-  InputBase,
 } from "@mui/material";
 import { routes } from "../utils/routes";
 import MenuIcon from "@mui/icons-material/Menu";
 import { NavLink } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
 import btcLogo from "./btc.png";
+import SearchComponent from "./SearchComponent";
 
 const Navbar: FC = (): ReactElement => {
   const [anchorElNav, setAnchorElNav] = React.useState(undefined);
@@ -93,7 +91,7 @@ const Navbar: FC = (): ReactElement => {
                   key={page.key}
                   component={NavLink}
                   to={page.path}
-                  color="black"
+                  color="white"
                   underline="none"
                   variant="button"
                 >
@@ -135,23 +133,7 @@ const Navbar: FC = (): ReactElement => {
               ))}
             </Box>
           </Box>
-          <Paper
-            component="form"
-            sx={{
-              p: "2px 4px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search the Timechain"
-              inputProps={{ "aria-label": "Search for a Block" }}
-            />
-            <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Paper>
+          <SearchComponent />
         </Toolbar>
       </Container>
     </Box>

@@ -49,3 +49,16 @@ export interface Status {
   block_hash: string;
   block_time: number;
 }
+
+export interface Address {
+    address: string;
+    chain_stats: Chain_Stats;
+}
+
+export interface Chain_Stats {
+    funded_txo_count: number;
+    funded_txo_sum: number;
+    spent_txo_count: number;
+    spent_txo_sum: number;
+    tx_count: number;
+}

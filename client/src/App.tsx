@@ -9,6 +9,7 @@ import TXDetailsPage from "./pages/DetailsPage/TXDetailsPage";
 import AddressDetailsPage from "./pages/DetailsPage/AddressDetailsPage";
 import { CssBaseline } from "@mui/material";
 import SummaryPage from "./pages/SummaryPage/SummaryPage";
+import BlockDetailsPage from "./pages/DetailsPage/BlockDetailsPage";
 export interface IAppProps {}
 
 const theme = createTheme({
@@ -28,6 +29,7 @@ const App: React.FC<IAppProps> = (props) => {
             <Route path="/blocks" element={<BlocksPage />} />
             <Route path="/kycaddresses" element={<KYCAddressesPage />} />
             <Route path="/coinbasetxs" element={<CoinbaseTXsPage />} />
+            <Route path="/block/:blockheight" element={<BlockDetailsPage />} />
             <Route path="/tx/:txid" element={<TXDetailsPage />} />
             <Route path="/address/:address" element={<AddressDetailsPage />} />
           </Route>
