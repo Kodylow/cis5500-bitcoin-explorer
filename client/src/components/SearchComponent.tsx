@@ -21,7 +21,6 @@ const SearchComponent = (props: Props) => {
           await fetch("http://localhost:5010/blockheaders/height")
         ).json();
         const curr_block_tip = res.message[0].height;
-        console.log(curr_block_tip);
         if (blockheight <= curr_block_tip) {
           navigate(`/block/${blockheight}`);
         } else {

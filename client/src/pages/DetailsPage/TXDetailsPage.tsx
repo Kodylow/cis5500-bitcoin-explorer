@@ -8,13 +8,16 @@ import {
   TableContainer,
   Paper,
   Typography,
+  Box
 } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Transaction } from "../../types/BitcoinTypes";
+import { Transaction, VinAddress } from "../../types/BitcoinTypes";
 import { Tree } from "react-tree-graph";
+import InputOutputComponent from './InputOutputComponent';
 import "./styles.css";
 import sha256 from "crypto-js/sha256";
+import transaction from "./transaction.png";
 
 export interface IProps {}
 
@@ -35,6 +38,8 @@ const TXDetailsPage: React.FC<IProps> = () => {
   const [blockHash, setBlockHash] = React.useState<String | undefined>(
     undefined
   );
+  const [vins, setVins] = React.useState<Array<VinAddress> | undefined>(undefined);
+
 
   const [tree, setTree] = React.useState<any>(undefined);
 
@@ -97,18 +102,41 @@ const TXDetailsPage: React.FC<IProps> = () => {
     }
   }, [txid]);
 
+  React.useEffect(() => {
+    if (txid !== undefined) {
+      (async () => {
+        const url = `http://localhost:5010/transactions/vouts/${txid}`;
+        let res = await fetch(url);
+        let data = await res.json();
+        setVins(data.message);
+      })();
+    }
+  }, [txid]);
+
   return (
-    <div>
+    <div style={{paddingBottom: '2rem'}}>
       <Grid>
-        <Typography sx={{ m: 2 }} variant="h3" alignSelf={"center"}>
-          Transaction Details
+        <Grid style={{display: 'flex', alignItems: 'center', marginLeft: '.5rem', marginTop: '1rem'}}>
+          <Box
+            component="img"
+            sx={{
+              height: "55px",
+              width: "auto",
+            }}
+            alt="Arrow img"
+            src={transaction}
+          />
+          <Typography variant="h4" alignSelf={"center"}>
+            Transaction Details
+          </Typography>
+        </Grid>
+
+        <Typography sx={{color: '#fff', m: 2 }} variant="subtitle1">
+          {tx ? tx["txid"] : ''}
         </Typography>
         {tx ? (
-          <Card sx={{ m: 2 }}>
+          <Card sx={{ m: 2 }} style={{marginBottom: '2rem'}}>
             <>
-              <Typography sx={{ m: 2 }} variant="subtitle1">
-                {tx["txid"]}
-              </Typography>
               <Grid container spacing={1}>
                 <Grid item xs={6}>
                   <Card sx={{ m: 2 }}>
@@ -191,20 +219,28 @@ const TXDetailsPage: React.FC<IProps> = () => {
         ) : (
           <Typography variant="body1">Loading...</Typography>
         )}
+
+        {tx? (<InputOutputComponent tx={tx} vins={vins} ></InputOutputComponent>) : <Typography variant="body1">Loading...</Typography> }
+
         {blockHash ? (
-          <Card sx={{ m: 2 }}>
-            <Typography sx={{ m: 2 }} variant="subtitle1">
-              Block Header
+          <React.Fragment>
+            <Typography sx={{ m: 2 }} variant="h4">
+              Merkle Tree
             </Typography>
-            <Typography sx={{ m: 2 }} variant="body1">
-              {blockHash}
-            </Typography>
-          </Card>
+            <Card sx={{ m: 2 }}>
+
+              <Typography sx={{ m: 2 }} variant="body1">
+                Block Hash: {blockHash}
+              </Typography>
+            </Card>
+          </React.Fragment>
         ) : (
           <Typography variant="body1">Loading...</Typography>
         )}
       </Grid>
-      <div id="treeWrapper" style={{ width: "100%", height: "40em" }}>
+
+
+      <Card id="treeWrapper" sx={{ m: 2, height: '100%' }} >
         {tree ? (
           <div className="custom-container">
             <Tree
@@ -219,9 +255,10 @@ const TXDetailsPage: React.FC<IProps> = () => {
         ) : (
           <Typography variant="body1">Loading...</Typography>
         )}
-      </div>
+      </Card>
     </div>
   );
 };
 
 export default TXDetailsPage;
+// style={{ width: "100%", height: "40rem" }}
