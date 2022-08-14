@@ -34,7 +34,7 @@ export const routes: Array<Route> = [
   },
   {
     key: "kycaddresses-route",
-    title: "KYCAddresses",
+    title: "KYC Addresses",
     path: "/kycaddresses",
     enabled: true,
     component: KYCAddressesPage,

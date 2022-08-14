@@ -10,9 +10,11 @@ import React from 'react'
 import AddressesListComponent from "./AddressesListComponent";
 import AddressTxsComponent from "./AddressTxsComponent";
 import AddressInfoComponent from "./AddressInfoComponent";
-import { Address } from "./AddressesTypes";
-type Props = {}
+import { Address } from "../../types/BitcoinTypes";
+import CopyToClipboardButton from "../../components/CopyToClipboardButton";
 
+
+type Props = {}
 export interface IAddressesPageProps {}
 
 const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
@@ -49,27 +51,30 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
 
   return (
     <Grid container spacing={1}>
-      <Grid item xs={2}>
+      <Grid item xs={3} sx={{wordWrap: 'break-word'}}>
         <AddressesListComponent address={addr} setAddress={setAddress} />
       </Grid>
-      <Grid item xs={10} sx={{ p: 2 }}>
-        <Box
+      <Grid item xs={9} sx={{ p: 2 }}>
+        <Grid
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            marginRight: "auto",
-            marginLeft: "auto",
-            alignItems: "center",
-            mt: "2rem",
+            marginLeft: '1.5rem',
+            marginTop: '1.5rem',
+            marginBottom: '1.25rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
           }}
         >
-          <Typography variant="h3" align="center" alignItems="center">
+          <Typography variant="h5" sx={{wordWrap: 'break-word'}}>
             {addr ? addr.address : "Loading..."}
           </Typography>
-        </Box>
+          <Box style={{display: 'inline-block', marginLeft: '.5rem'}}>
+              <CopyToClipboardButton copiedText={addr ? addr.address : ''}/>
+          </Box>
+        </Grid>
         <AddressInfoComponent address={addr} />
-        <Card sx={{ m: 2 }}>
+        <Card sx={{ m: 2, marginTop: '1.75rem' }}>
           <CardContent>
             <Typography variant="h5" sx={{ mb: "1rem" }}>
               Address Transactions

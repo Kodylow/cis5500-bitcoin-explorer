@@ -1,16 +1,15 @@
 import React from 'react'
 import { Dispatch, SetStateAction } from "react";
-import { Address } from "./AddressesTypes";
+import { Address } from "../../types/BitcoinTypes";
 import {
   List,
   ListItem,
-  ListItemAvatar,
   Typography,
   ListItemText,
-  Box,
+  ListItemAvatar,
+  SvgIcon,
 } from "@mui/material";
-import moment from "moment";
-import { resourceUsage } from 'process';
+import QrCode2Icon from '@mui/icons-material/QrCode2';
 
 export interface IProps {
     address: Address | undefined;
@@ -60,10 +59,13 @@ const AddressesListComponent: React.FC<IProps>  = ({address, setAddress}) => {
               }
               key={addr.address}
             >
+              <ListItemAvatar>
+                <SvgIcon component={QrCode2Icon} sx={{fontSize: '2rem'}}></SvgIcon>
+              </ListItemAvatar>
               <ListItemText
                 primary={addr.address}
               />
-            </ListItem>
+            </ListItem  >
           ))}
         </React.Fragment>
       ) : (

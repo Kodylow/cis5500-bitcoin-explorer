@@ -8,10 +8,12 @@ import {
   TableContainer,
   Paper,
   Typography,
+  Box
 } from "@mui/material";
 import React from "react";
 import { BlockHeader } from "../../types/BitcoinTypes";
 import moment from "moment";
+import CopyToClipboardButton from "../../components/CopyToClipboardButton";
 
 export interface IProps {
   block: BlockHeader | undefined;
@@ -21,10 +23,10 @@ const BlockHeaderInfoComponent: React.FC<IProps> = ({ block }) => {
   // Additional block information parsing for displaying cleaned key in the table component
   return (
     <React.Fragment>
-      <Card sx={{ m: 2 }}>
         <Typography variant="h5" sx={{ ml: "1rem", mt: "1rem" }}>
           Block Header Information
         </Typography>
+      <Card sx={{ m: 2 }}>
         {block ? (
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -42,6 +44,9 @@ const BlockHeaderInfoComponent: React.FC<IProps> = ({ block }) => {
                     sx={{ textAlign: "right" }}
                   >
                     {block["hash"]}
+                    <Box style={{display: 'inline-block', marginLeft: '.5rem'}}>
+                      <CopyToClipboardButton copiedText={block["hash"]}/>
+                    </Box>
                   </TableCell>
                 </TableRow>
                 <TableRow
