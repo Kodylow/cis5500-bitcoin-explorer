@@ -6,5 +6,7 @@ const router = express.Router();
 router.get("/", transactionHeadersController.getTxs);
 router.get("/:id", transactionHeadersController.getTxDetailsByTxID);
 router.get("/:id/merkle-proof", transactionHeadersController.getMerkleProof);
+router.get("/vouts/:id", transactionHeadersController.getVoutAddresses);
+
 
 export = router;

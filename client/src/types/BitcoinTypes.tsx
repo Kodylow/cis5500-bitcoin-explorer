@@ -38,8 +38,8 @@ export interface Vin {
 export interface Vout {
   scriptPubKey: string;
   scriptPubKey_asm: string;
-  scriptPubKey_type: string;
-  scriptPubKey_address: string;
+  scriptpubkey_type: string;
+  scriptpubkey_address: string;
   value: number;
 }
 
@@ -61,4 +61,9 @@ export interface Chain_Stats {
     spent_txo_count: number;
     spent_txo_sum: number;
     tx_count: number;
+}
+
+export interface VinAddress {
+  address: string;
+  value: number;
 }

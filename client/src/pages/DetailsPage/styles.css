@@ -1,7 +1,8 @@
 div.custom-container {
-  background-color: #242424;
+  background-color: #1e1e1e;
   padding: 20px;
   width: 100%;
+  overflow: auto; /* Allows scroll if the tree is big */
 }
 
 svg.custom .node circle {

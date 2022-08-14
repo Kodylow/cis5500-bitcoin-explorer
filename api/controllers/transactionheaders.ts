@@ -9,6 +9,12 @@ interface txids {
   txid: String[];
 }
 
+interface inputAddress {
+  address: string;
+  value: number;
+}
+
+
 // Returns list of transactions for a given height
 // If no height passed - use the max block height from the database
 export const getTxs = async (
@@ -18,7 +24,6 @@ export const getTxs = async (
 ) => {
   try {
     let height = Number(req.query.height);
-    console.log(height);
 
     // Check if valid height
     let valid: boolean = await isValidHeight(height);
@@ -89,8 +94,54 @@ export const getMerkleProof = async (
   });
 };
 
+const getVinAddress = async (txid: string, vout: number) => {
+  let results = [];
+
+  try{
+    let txDetail: any = await getTxDetails(txid);
+    for (let idx = 0; idx < txDetail.vout.length; idx += 1) {
+      if (idx === vout) {
+        let output = {'address': '', 'value': 0};
+
+        output['address'] = txDetail.vout[idx].scriptpubkey_address;
+        output['value'] = txDetail.vout[idx].value;
+
+        results.push(output);
+      }
+    }
+    console.log(results);
+    return results;
+  } catch (err) {
+    let output = {'address': '', 'value': 0};
+    output.address = 'Coinbase';
+    results.push(output);
+    return results
+  }
+
+}
+
+// Returns the list of vout addresses and its bitcoin value
+export const getVoutAddresses = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let id: string = String(req.params.id);
+  let txDetail: any = await getTxDetails(id);
+
+  let results: Array<inputAddress> = [];
+  for (let idx = 0; idx < txDetail.vin.length; idx += 1) {
+    let inputAddresses: Array<inputAddress> = await getVinAddress(txDetail.vin[idx].txid, txDetail.vin[idx].vout);
+    results = results.concat(inputAddresses);
+  }
+  return res.status(200).json({
+    message: results,
+  });
+}
+
 export default {
   getTxs,
   getTxDetailsByTxID,
   getMerkleProof,
+  getVoutAddresses
 };
