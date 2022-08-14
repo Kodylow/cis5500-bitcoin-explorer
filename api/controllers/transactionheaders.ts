@@ -128,10 +128,9 @@ export const getVoutAddresses = async (
 ) => {
   let id: string = String(req.params.id);
   let txDetail: any = await getTxDetails(id);
-  // let i = await getVinAddress(txDetail.vin[0].txid, txDetail.vin[0].vout);
 
   let results: Array<inputAddress> = [];
-  for (let idx = 0; idx < 1; idx += 1) {
+  for (let idx = 0; idx < txDetail.vin.length; idx += 1) {
     let inputAddresses: Array<inputAddress> = await getVinAddress(txDetail.vin[idx].txid, txDetail.vin[idx].vout);
     results = results.concat(inputAddresses);
   }
