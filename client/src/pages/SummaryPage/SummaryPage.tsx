@@ -210,10 +210,15 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
     <React.Fragment>
       <Grid
         container
-        justifyContent="flex-start"
-        sx={{ mt: "2.5rem", mx: "auto" }}
-        width="90%"
-        spacing={1}
+        sx={{
+        mt: "3rem",
+        display: "flex",
+        justifyContent: "flex-start",
+        mr: "auto",
+        ml: "auto",
+      }}
+        width="80%"
+        spacing={0}
       >
         <Grid item xs={4} sm={4} md={2.5} lg={2} xl={1}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>

@@ -5,7 +5,6 @@ const getTxDetails = async (txid: String) => {
     `https://blockstream.info/api/tx/${txid}`
   );
   let txDetail = txDetailResponse.data;
-  console.log(txDetail);
   return txDetail;
 };
 

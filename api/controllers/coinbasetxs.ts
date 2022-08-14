@@ -46,7 +46,7 @@ export const getCoinbaseTxs = async (
       bh.height BETWEEN ${hstart} AND ${hend}
     ORDER BY bh.height DESC
   `;
-  
+
   console.log(coinbase_query);
 
   // get data for a specific block header
@@ -104,8 +104,6 @@ const getCoinbaseTxByBlockHeight = async (
     WHERE
       bh.height = ${blockheight}
   `;
-
-  console.log(coinbase_query);
 
   return res.status(200).json({
     message: coinbase_query,
