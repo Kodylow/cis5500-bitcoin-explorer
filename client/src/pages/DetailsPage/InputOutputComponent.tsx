@@ -50,7 +50,7 @@ const InputOutputComponent: React.FC<IProps> = ({ tx, vins}) =>  {
                       'Coinbase'
                     :
                     <Link
-                    href={`/addresses/${vin['address']}`}
+                    href={`/address/${vin['address']}`}
                     style={{ textDecoration: "none", color: "#00ccff", fontSize: '1rem'}}
                     >
                       {vin.address}
@@ -91,7 +91,7 @@ const InputOutputComponent: React.FC<IProps> = ({ tx, vins}) =>  {
                 }>
                   {output.scriptpubkey_address ?
                     <Link
-                      href={`/addresses/${output['scriptpubkey_address']}`}
+                      href={`/address/${output['scriptpubkey_address']}`}
                       style={{ textDecoration: "none", color: "#00ccff", fontSize: '1rem' }}
                     >
                       {output['scriptpubkey_address']}

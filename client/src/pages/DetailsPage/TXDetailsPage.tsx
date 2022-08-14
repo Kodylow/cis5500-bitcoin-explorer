@@ -18,6 +18,8 @@ import InputOutputComponent from './InputOutputComponent';
 import "./styles.css";
 import sha256 from "crypto-js/sha256";
 import transaction from "./transaction.png";
+import CopyToClipboardButton from "../../components/CopyToClipboardButton";
+
 
 export interface IProps {}
 
@@ -116,7 +118,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
   return (
     <div style={{paddingBottom: '2rem'}}>
       <Grid>
-        <Grid style={{display: 'flex', alignItems: 'center', marginLeft: '.5rem', marginTop: '1rem'}}>
+        <Grid style={{display: 'flex', alignItems: 'center', marginLeft: '1rem', marginTop: '1rem'}}>
           <Box
             component="img"
             sx={{
@@ -131,9 +133,15 @@ const TXDetailsPage: React.FC<IProps> = () => {
           </Typography>
         </Grid>
 
-        <Typography sx={{color: '#fff', m: 2 }} variant="subtitle1">
-          {tx ? tx["txid"] : ''}
-        </Typography>
+        <Grid container sx={{display: 'flex', alignItems: 'center', marginLeft: '1.5rem', marginBottom: '1.5rem', justifyContent: 'flex-start'}}>
+            <Typography sx={{color: '#fff'}} variant="subtitle1">
+              {tx ? tx["txid"] : ''}
+            </Typography>
+            <Box sx={{marginLeft: '.75rem'}}>
+              <CopyToClipboardButton copiedText={tx ? tx.txid : ''}/>
+            </Box>
+        </Grid>
+
         {tx ? (
           <Card sx={{ m: 2 }} style={{marginBottom: '2rem'}}>
             <>
@@ -196,11 +204,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
                               {tx["vin"].length}
                             </TableCell>
                           </TableRow>
-                          <TableRow
-                            sx={{
-                              "&:last-child td, &:last-child th": { border: 0 },
-                            }}
-                          >
+                          <TableRow>
                             <TableCell component="th" scope="row">
                               Outputs
                             </TableCell>
