@@ -213,9 +213,9 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
         justifyContent="flex-start"
         sx={{ mt: "2.5rem", mx: "auto" }}
         width="90%"
-        spacing={0}
+        spacing={1}
       >
-        <Grid item xs={4} sm={4} md={2.5} lg={2}>
+        <Grid item xs={4} sm={4} md={2.5} lg={2} xl={1}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Start Date"
@@ -235,7 +235,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
             />
           </LocalizationProvider>
         </Grid>
-        <Grid item xs={4} sm={4} md={2.5} lg={2} sx={{ ml: "1rem" }}>
+        <Grid item xs={4} sm={4} md={2.5} lg={2} xl={1} sx={{ ml: "1rem" }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="End Date"
@@ -268,7 +268,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
           mr: "auto",
           ml: "auto",
         }}
-        width="90%"
+        width="75%"
       >
         <IndicatorChart
           data={avgWeightData}

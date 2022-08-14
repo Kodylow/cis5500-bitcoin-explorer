@@ -9,12 +9,13 @@ import {
     TableContainer,
     Paper,
     Typography,
+    Box,
 } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { Address, Transaction } from "../../types/BitcoinTypes";
 import AddressTxsComponent from "./AddressTxsComponent";
-import { Tree } from "react-tree-graph";
+import CopyToClipboardButton from "../../components/CopyToClipboardButton";
 import "./styles.css";
 
 export interface IProps {}
@@ -44,8 +45,6 @@ const AddressDetailsPage: React.FC<IProps> = () => {
         let data = await res.json();
         console.log(data.message);
         setTXs(data);
-          console.log(txs);
-          console.log(txs.length);
       })();
     }
   }, [address]);
@@ -53,12 +52,21 @@ const AddressDetailsPage: React.FC<IProps> = () => {
   return (
     <div>
           <Grid>
-              <Typography sx={{ m: 2 }} variant="h3" alignSelf={"center"}>
+              <Typography variant="h4" alignSelf={"center"} sx={{marginTop: '1.5rem', marginLeft: '1.5rem' }}>
                   Address Details
               </Typography>
               {addr ? (
-                  <><Card sx={{ m: 2 }}>
-                      <><Typography sx={{ m: 2 }} variant="subtitle1">{addr["address"]}</Typography>
+
+                  <>
+                  <Grid container sx={{display: 'flex', alignItems: 'center', marginLeft: '1.5rem', marginBottom: '1.5rem', justifyContent: 'flex-start'}}>
+                      <Typography variant="subtitle1">{addr["address"]}</Typography>
+                      <Box sx={{marginLeft: '.75rem'}}>
+                        <CopyToClipboardButton copiedText={addr.address}/>
+                      </Box>
+                  </Grid>
+
+                  <Card sx={{ m: 2, marginBottom: '2rem'}}>
+                      <>
                           <Grid container spacing={1}>
                               <Grid item xs={6}>
                                   <Card sx={{ m: 2 }}>
@@ -78,7 +86,9 @@ const AddressDetailsPage: React.FC<IProps> = () => {
                                                       <TableCell component="th" scope="row">
                                                           Funded TXO Sum
                                                       </TableCell>
-                                                      <TableCell align="right">{addr["chain_stats"]["funded_txo_sum"]}</TableCell>
+                                                      <TableCell align="right">
+                                                        {addr["chain_stats"]["funded_txo_sum"] / 100000000 + " BTC"}
+                                                      </TableCell>
                                                   </TableRow>
 
                                                   <TableRow>
@@ -127,7 +137,7 @@ const AddressDetailsPage: React.FC<IProps> = () => {
                     </Card>
                   </>
               ) : (
-                  <Typography variant="body1">Loading...</Typography>
+                  <Typography variant="body1" sx={{marginLeft: '1.5rem'}}>Loading...</Typography>
               )}
           </Grid>
     </div>
