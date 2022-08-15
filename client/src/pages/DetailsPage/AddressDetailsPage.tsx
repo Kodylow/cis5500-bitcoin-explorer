@@ -102,7 +102,7 @@ const AddressDetailsPage: React.FC<IProps> = () => {
                                                       <TableCell component="th" scope="row">
                                                           Spent TXO Sum
                                                       </TableCell>
-                                                      <TableCell align="right">{addr["chain_stats"]["spent_txo_sum"]}</TableCell>
+                                                      <TableCell align="right">{addr["chain_stats"]["spent_txo_sum"] / 100000000 + " BTC"}</TableCell>
                                                   </TableRow>
                                               </TableBody>
                                           </Table>
