@@ -33,11 +33,11 @@ import {
     }, [address]);
 
     return (
-        <React.Fragment>
+      <React.Fragment>
+        <Typography variant="h5" sx={{ ml: "1rem", mt: "1rem" }} align="center">
+          Address Information
+        </Typography>
         <Card sx={{ m: 2 }}>
-          <Typography variant="h5" sx={{ ml: "1rem", mt: "1rem" }}>
-            Address Information
-          </Typography>
           {address ? (
           <Card sx={{ m: 2 }}>
             <Grid container spacing={1}>

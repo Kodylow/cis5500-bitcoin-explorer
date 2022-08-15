@@ -24,7 +24,6 @@ const AddressDetailsPage: React.FC<IProps> = () => {
   let { address } = useParams();
   const [addr, setAddr] = React.useState<Address | undefined>(undefined);
   const [txs, setTXs] = React.useState<Array<Transaction>>([]);
-  // const [tree, setTree] = React.useState<any>(undefined);
 
   React.useEffect(() => {
     if (address !== undefined) {
@@ -51,21 +50,29 @@ const AddressDetailsPage: React.FC<IProps> = () => {
 
   return (
     <div>
-          <Grid>
-              <Typography variant="h4" alignSelf={"center"} sx={{marginTop: '1.5rem', marginLeft: '1.5rem' }}>
+          <Grid sx={{ p: 2 }}>
+              <Typography variant="h4" align="center" sx={{marginTop: '1.5rem', marginLeft: '1.5rem' }}>
                   Address Details
               </Typography>
               {addr ? (
 
                   <>
-                  <Grid container sx={{display: 'flex', alignItems: 'center', marginLeft: '1.5rem', marginBottom: '1.5rem', justifyContent: 'flex-start'}}>
-                      <Typography variant="subtitle1">{addr["address"]}</Typography>
+                  <Grid
+                    container
+                    sx={{
+                        display: 'flex'
+                        , alignItems: 'center'
+                        , ml: '1.5rem'
+                        , mb: '1.5rem'
+                        , justifyContent: 'center'}}
+                  >
+                      <Typography variant="subtitle1" align="center">{addr["address"]}</Typography>
                       <Box sx={{marginLeft: '.75rem'}}>
                         <CopyToClipboardButton copiedText={addr.address}/>
                       </Box>
                   </Grid>
 
-                  <Card sx={{ m: 2, marginBottom: '2rem'}}>
+                  <Card sx={{ m: 2, marginBottom: '2rem', width: '75%', marginRight: 'auto', marginLeft: 'auto'}}>
                       <>
                           <Grid container spacing={1}>
                               <Grid item xs={6}>
@@ -127,11 +134,11 @@ const AddressDetailsPage: React.FC<IProps> = () => {
                               </Grid>
                           </Grid></>
                   </Card>
-                  <Card sx={{ m: 2 }}>
+                  <Typography variant="h5" align="center" sx={{ mb: "1rem" }}>
+                    Recent Transactions on the Address
+                  </Typography>
+                  <Card sx={{ m: 2, width: '55%', mr: 'auto', ml: 'auto', mb: '3rem' }}>
                       <CardContent>
-                          <Typography variant="h5" sx={{ mb: "1rem" }}>
-                              Recent Transactions on Address
-                          </Typography>
                           <AddressTxsComponent txs={txs} />
                       </CardContent>
                     </Card>

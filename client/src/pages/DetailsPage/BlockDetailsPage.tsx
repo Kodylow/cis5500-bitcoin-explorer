@@ -51,7 +51,7 @@ const BlockDetailsPage: React.FC<IProps> = () => {
   }, [block]);
 
   return (
-    <Grid container sx={{width: '90%', marginRight: 'auto', marginLeft: 'auto'}}>
+    <Grid container>
       <Grid item xs={12} sx={{ p: 2 }}>
         <Box
           sx={{
@@ -82,13 +82,14 @@ const BlockDetailsPage: React.FC<IProps> = () => {
             {block ? "Block " + block.height : "Loading..."}
           </Typography>
         </Box>
-
-        <BlockHeaderInfoComponent block={block} />
-        <Card sx={{ m: 2 }}>
+        <Box sx={{width: '75%', marginRight: 'auto', marginLeft: 'auto'}}>
+          <BlockHeaderInfoComponent block={block} />
+        </Box>
+        <Typography variant="h5" sx={{ mb: "1rem" }} align="center">
+          Transactions in Block
+        </Typography>
+        <Card sx={{ m: 2, width: '55%', mr: 'auto', ml: 'auto'}}>
           <CardContent>
-            <Typography variant="h5" sx={{ mb: "1rem" }}>
-              Transactions in Block
-            </Typography>
             <Pagination
               count={Math.ceil(txids.length / 25)}
               color="primary"

@@ -118,7 +118,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
   return (
     <div style={{paddingBottom: '2rem'}}>
       <Grid>
-        <Grid style={{display: 'flex', alignItems: 'center', marginLeft: '1rem', marginTop: '1rem'}}>
+        <Grid style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1rem'}}>
           <Box
             component="img"
             sx={{
@@ -133,7 +133,10 @@ const TXDetailsPage: React.FC<IProps> = () => {
           </Typography>
         </Grid>
 
-        <Grid container sx={{display: 'flex', alignItems: 'center', marginLeft: '1.5rem', marginBottom: '1.5rem', justifyContent: 'flex-start'}}>
+        <Grid
+          container
+          sx={{display: 'flex', alignItems: 'center', marginBottom: '1.5rem', justifyContent: 'center'}}
+        >
             <Typography sx={{color: '#fff'}} variant="subtitle1">
               {tx ? tx["txid"] : ''}
             </Typography>
@@ -143,7 +146,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
         </Grid>
 
         {tx ? (
-          <Card sx={{ m: 2 }} style={{marginBottom: '2rem'}}>
+          <Card sx={{ mb: '2rem', width: '90%', ml: 'auto', mr: 'auto' }} >
             <>
               <Grid container spacing={1}>
                 <Grid item xs={6}>
@@ -224,14 +227,19 @@ const TXDetailsPage: React.FC<IProps> = () => {
           <Typography variant="body1">Loading...</Typography>
         )}
 
-        {tx? (<InputOutputComponent tx={tx} vins={vins} ></InputOutputComponent>) : <Typography variant="body1">Loading...</Typography> }
+        <Typography variant="h4" align="center" sx={{letterSpacing: '1px', color: '#fff', marginBottom: '1rem'}}>
+          Inputs & Outputs
+        </Typography>
+        <Box sx={{width: '90%', ml: 'auto', mr: 'auto'}}>
+          {tx? (<InputOutputComponent tx={tx} vins={vins} ></InputOutputComponent>) : <Typography variant="body1">Loading...</Typography> }
+        </Box>
 
         {blockHash ? (
           <React.Fragment>
-            <Typography sx={{ m: 2 }} variant="h4">
+            <Typography sx={{ m: 2 }} align="center" variant="h4">
               Merkle Tree
             </Typography>
-            <Card sx={{ m: 2 }}>
+            <Card sx={{ m: 2, width: '90%', ml: 'auto', mr: 'auto' }}>
 
               <Typography sx={{ m: 2 }} variant="body1">
                 Block Hash: {blockHash}
@@ -244,7 +252,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
       </Grid>
 
 
-      <Card id="treeWrapper" sx={{ m: 2, height: '100%' }} >
+      <Card id="treeWrapper" sx={{ m: 2, height: '100%', width: '90%', ml: 'auto', mr: 'auto' }} >
         {tree ? (
           <div className="custom-container">
             <Tree
