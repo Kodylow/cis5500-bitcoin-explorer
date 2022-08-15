@@ -46,13 +46,13 @@ const getBlocks = async (req: Request, res: Response, next: NextFunction) => {
 
   // To avoid pull hundreds of thousands of blocks if start begins at 0 with no hend query parameter
   if (Number.isInteger(hstart) && Number.isNaN(hend)) {
-    hend = hstart + 35;
+    hend = hstart + 20;
   } else if (Number.isNaN(hend) && Number.isNaN(hstart)) {
     hend = sHeightDefault;
   }
 
   if (Number.isNaN(hstart)) {
-    hstart = hend - 35;
+    hstart = hend - 20;
   }
 
   // query to get all block headers ordered by height desc

@@ -9,6 +9,7 @@ import {
   Typography,
   ListItemText,
   Box,
+  Button,
 } from "@mui/material";
 import moment from "moment";
 
@@ -21,6 +22,17 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
   const [blockheaders, setBlockheaders] = React.useState<
     Array<BlockHeader> | undefined
   >(undefined);
+  const [currHeight, setCurrHeight] = React.useState<number | undefined>();
+  const moreBlocks = 10;
+
+  const getMoreBlockHeaders = async () => {
+    if (currHeight) {
+      const res = await (
+        await fetch(`http://www.localhost:5010/blockheaders?hstart=${currHeight - moreBlocks}&hend=${currHeight - 1}`)
+      ).json();
+      setBlockheaders([...(blockheaders || []), ...res.message]);
+    }
+  }
 
   React.useEffect(() => {
     (async () => {
@@ -28,8 +40,17 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
         await fetch("http://www.localhost:5010/blockheaders/")
       ).json();
       setBlockheaders([...res.message]);
+
     })();
   }, []);
+
+  React.useEffect(() => {
+    if (blockheaders) {
+      console.log(blockheaders[blockheaders.length - 1].height);
+      let minHeight = blockheaders[blockheaders.length - 1].height;
+      setCurrHeight(minHeight);
+    }
+  }, [blockheaders]);
 
   return (
     <List
@@ -85,6 +106,19 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
               />
             </ListItem>
           ))}
+          <Button
+            variant="outlined"
+            sx={{
+              display: 'flex',
+              width: '50%',
+              marginRight: 'auto',
+              marginLeft: 'auto',
+              marginBottom: '1rem'
+            }}
+            onClick={getMoreBlockHeaders}
+          >
+            Load More
+          </Button>
         </React.Fragment>
       ) : (
         <Typography variant="body1" align="center">
