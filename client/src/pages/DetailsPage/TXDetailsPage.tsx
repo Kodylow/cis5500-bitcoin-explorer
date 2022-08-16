@@ -36,7 +36,7 @@ function hash256(data: string) {
 const TXDetailsPage: React.FC<IProps> = () => {
   let { txid } = useParams();
   const [tx, setTx] = React.useState<Transaction | undefined>(undefined);
-  const [blockHash, setBlockHash] = React.useState<String | undefined>(
+  const [merkleRoot, setMerkleRoot] = React.useState<String | undefined>(
     undefined
   );
   const [vins, setVins] = React.useState<Array<VinAddress> | undefined>(
@@ -95,8 +95,8 @@ const TXDetailsPage: React.FC<IProps> = () => {
             `http://localhost:5010/blockheaders/${data.message.status.block_height}`
           )
         ).json();
-        let blockHash = blockHeader.message[0].hash;
-        setBlockHash(blockHash);
+        let merkleRoot = blockHeader.message[0].merkle_root;
+        setMerkleRoot(merkleRoot);
         url = `http://localhost:5010/transactions/${txid}/merkle-proof`;
         res = await fetch(url);
         data = await res.json();
@@ -122,9 +122,8 @@ const TXDetailsPage: React.FC<IProps> = () => {
         const url = `http://www.localhost:5010/transactions/flagged/${txid}`;
         let res = await fetch(url);
         let data = await res.json();
-
-        if (data.message > 0) {
-          alert("TX is flagged as having KYCed!!!!");
+        console.log(data);
+        if (data.message) {
           setFlagged(true);
         } else {
           setFlagged(false);
@@ -274,14 +273,14 @@ const TXDetailsPage: React.FC<IProps> = () => {
           )}
         </Box>
 
-        {blockHash ? (
+        {merkleRoot ? (
           <React.Fragment>
             <Typography sx={{ m: 2 }} align="center" variant="h4">
-              Merkle Tree
+              Merkle Proof
             </Typography>
             <Card sx={{ m: 2, width: "90%", ml: "auto", mr: "auto" }}>
               <Typography sx={{ m: 2 }} variant="body1">
-                Block Hash: {blockHash}
+                Merkle Root: {merkleRoot}
               </Typography>
             </Card>
           </React.Fragment>

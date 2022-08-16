@@ -154,12 +154,10 @@ const getTXFlagged = async (
     WHERE
       txid = '${String(req.params.id)}';
   `;
-  console.log(query);
   let pgResult: QueryResult<any> = await pool.query(query);
   let flagged: any[] = pgResult.rows;
-
   return res.status(200).json({
-    message: flagged.length > 0 ? true : false,
+    message: flagged[0]["count"] !== "0" ? true : false,
   });
 };
 
