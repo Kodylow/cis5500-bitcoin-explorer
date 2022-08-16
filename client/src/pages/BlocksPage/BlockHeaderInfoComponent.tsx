@@ -23,7 +23,7 @@ const BlockHeaderInfoComponent: React.FC<IProps> = ({ block }) => {
   // Additional block information parsing for displaying cleaned key in the table component
   return (
     <React.Fragment>
-        <Typography variant="h5" sx={{ ml: "1rem", mt: "1rem" }}>
+        <Typography variant="h5" sx={{ ml: "1rem", mt: "1rem" }} align="center">
           Block Header Information
         </Typography>
       <Card sx={{ m: 2 }}>

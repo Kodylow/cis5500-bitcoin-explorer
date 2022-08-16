@@ -1,4 +1,4 @@
-import { List, Grid, ListItem, Typography } from "@mui/material";
+import { TableRow, TableContainer, Table, Grid, Paper, Typography } from "@mui/material";
 import React from 'react'
 import CollapsableTransaction from "../BlocksPage/CollapsableTransactionComponent";
 
@@ -11,25 +11,20 @@ const AddressTxsComponent: React.FC<IProps> = ({txids, page}) => {
   return (
     <Grid sx={{ position: "sticky", top: "0" }}>
       {txids.length ? (
-        <List
-          sx={{
-            height: "60vh",
-            bgcolor: "background.paper",
-            overflow: "auto",
-            mt: "1rem",
-          }}
-        >
+        <TableContainer component={Paper}>
+          <Table>
           {txids.map((txid, index) => {
             return (
-              <ListItem key={txid}>
+              <TableRow sx={{borderBottom: '.5px rgba(255, 255, 255, 0.5) solid', }}>
                 <CollapsableTransaction
                   index={index + (page - 1) * 25}
                   txid={txid}
                 />
-              </ListItem>
+              </TableRow>
             );
           })}
-        </List>
+          </Table>
+        </TableContainer>
       ) : (
         <Typography variant="body1" align="center">
           Loading...

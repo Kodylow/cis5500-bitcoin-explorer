@@ -7,14 +7,26 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link } from "react-router-dom";
 import { Transaction } from "../../types/BitcoinTypes";
 import TransactionHeaderInfoComponent from "./TransactionHeaderInfoComponent";
+import { makeStyles, createStyles } from '@mui/styles';
 
 export interface IProps {
   index: number;
   txid: string;
 }
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    'accordion-border-radius': {
+      borderBottomLeftRadius: "0 !important",
+      borderBottomRightRadius: "0 !important",
+    }
+  }),
+);
+
+
 const CollapsableTransaction: React.FC<IProps> = ({ index, txid }) => {
   const [tx, setTx] = React.useState<Transaction | undefined>();
+  const classes = useStyles();
 
   const handleClick = () => {
     if (txid !== undefined) {
@@ -27,13 +39,18 @@ const CollapsableTransaction: React.FC<IProps> = ({ index, txid }) => {
     }
   };
 
+
   return (
     <div>
-      <Accordion>
+      <Accordion
+        onClick={() => handleClick()}
+        className={classes['accordion-border-radius']}
+        sx={{borderBottomLeftRadius: 0, borderBottomRightRadius: 0, padding: '.25rem', outline: 'none'}}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon onClick={() => handleClick()} />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
         >
           <Typography>
             <Link

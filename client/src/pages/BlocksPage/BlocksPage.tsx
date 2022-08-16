@@ -55,7 +55,7 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
         let res = await fetch(url);
         let data = await res.json();
         setTxids([...data.message]);
-        setPageTXs([...data.message.slice(0, 25)]);
+        setPageTXs([...data.message.slice(0, 15)]);
       })();
     } else {
       setTxids([]);
@@ -97,21 +97,23 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
             {block ? "Block " + block.height : "Loading..."}
           </Typography>
         </Box>
-
-        <BlockHeaderInfoComponent block={block} />
-        <Card sx={{ m: 2 }}>
+        <Box sx={{width: '90%', mr: 'auto', ml: 'auto'}}>
+          <BlockHeaderInfoComponent block={block} />
+        </Box>
+        <Typography variant="h5" sx={{ mb: "1rem", m: 2 }} align='center'>
+          Transactions in Block
+        </Typography>
+        <Card sx={{ m: 2, width: '60%', marginRight: 'auto', marginLeft: 'auto'}}>
           <CardContent>
-            <Typography variant="h5" sx={{ mb: "1rem" }}>
-              Transactions in Block
-            </Typography>
             <Pagination
-              count={Math.ceil(txids.length / 25)}
+              count={Math.ceil(txids.length / 15)}
               color="primary"
               page={page}
               onChange={(event, value) => {
                 setPage(value);
-                setPageTXs([...txids.slice((value - 1) * 25, value * 25)]);
+                setPageTXs([...txids.slice((value - 1) * 15, value * 15)]);
               }}
+              sx={{mb: '1rem'}}
             />
             <BlockTxsComponent txids={pageTXs} page={page} />
           </CardContent>

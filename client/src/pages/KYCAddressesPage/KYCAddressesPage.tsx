@@ -73,12 +73,14 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
               <CopyToClipboardButton copiedText={addr ? addr.address : ''}/>
           </Box>
         </Grid>
-        <AddressInfoComponent address={addr} />
-        <Card sx={{ m: 2, marginTop: '1.75rem' }}>
+        <Box sx={{width: '90%', mr: 'auto', ml: 'auto'}}>
+          <AddressInfoComponent address={addr} />
+        </Box>
+        <Typography variant="h5" sx={{ mb: "1rem" }} align="center">
+          Address Transactions
+        </Typography>
+        <Card sx={{ m: 2, marginTop: '1.75rem', width: '75%', mr: 'auto', ml: 'auto' }}>
           <CardContent>
-            <Typography variant="h5" sx={{ mb: "1rem" }}>
-              Address Transactions
-            </Typography>
             <Pagination
               count={Math.ceil(txids.length / 25)}
               color="primary"

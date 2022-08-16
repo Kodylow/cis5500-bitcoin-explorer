@@ -1,4 +1,4 @@
-import { List, Grid, ListItem, Typography } from "@mui/material";
+import { TableRow, TableContainer, Table, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import CollapsableTransaction from "../BlocksPage/CollapsableTransactionComponent";
 import { Transaction } from "../../types/BitcoinTypes";
@@ -11,25 +11,20 @@ const AddressTxsComponent: React.FC<IProps> = ({ txs }) => {
   return (
     <Grid sx={{ position: "sticky", top: "0" }}>
       {txs.length ? (
-        <List
-          sx={{
-            height: "60vh",
-            bgcolor: "background.paper",
-            overflow: "auto",
-            mt: "1rem",
-          }}
-        >
-          {txs.map((tx, index) => {
-            return (
-              <ListItem key={tx["txid"]}>
-                <CollapsableTransaction
-                  index={index}
-                  txid={tx["txid"]}
-                />
-              </ListItem>
-            );
-          })}
-        </List>
+        <TableContainer component={Paper}>
+          <Table>
+            {txs.map((tx, index) => {
+              return (
+                <TableRow sx={{borderBottom: '.5px rgba(255, 255, 255, 0.5) solid', }}>
+                  <CollapsableTransaction
+                      index={index}
+                      txid={tx["txid"]}
+                    />
+                </TableRow>
+              );
+            })}
+          </Table>
+        </TableContainer>
       ) : (
         <Typography variant="body1" align="center">
           Loading...
