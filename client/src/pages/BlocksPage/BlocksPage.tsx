@@ -21,7 +21,6 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   const [page, setPage] = React.useState(1);
   const [pageTXs, setPageTXs] = React.useState<Array<string>>([]);
   const [txids, setTxids] = React.useState<Array<string>>([]);
-  const [flaggedTXs, setFlaggedTXs] = React.useState<Array<string>>([]);
 
   // Set the initial block header to the maximum block height in database
   React.useEffect(() => {
@@ -62,23 +61,6 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
       setTxids([]);
     }
   }, [block]);
-
-  React.useEffect(() => {
-    if (pageTXs !== undefined) {
-      (async () => {
-        const url = `http://www.localhost:5010/transactions/flaggedtxs`;
-        let res = await fetch(url, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(pageTXs),
-        });
-        let data = await res.json();
-        setFlaggedTXs([...data.message]);
-      })();
-    } else {
-      setFlaggedTXs([]);
-    }
-  }, [pageTXs]);
 
   return (
     <Grid container spacing={1}>
