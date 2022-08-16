@@ -164,6 +164,33 @@ const getBlockByHeight = async (
   });
 };
 
+//check if block exists in database
+const checkBlockExists = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // get the block hash from the req
+  let id: string = String(req.params.id);
+
+  // query to get blockheader data
+  const blockheader_query = `
+  SELECT
+    height
+  FROM
+    bitcoin.block_headers
+  WHERE
+    hash = '${id}'
+  `;
+
+  let pgResult: QueryResult<any> = await pool.query(blockheader_query);
+  let blockHeaderData: any[] = pgResult.rows;
+
+  return res.status(200).json({
+    message: blockHeaderData,
+  });
+};
+
 // getting a single block
 const getBlockTxs = async (req: Request, res: Response, next: NextFunction) => {
   // get the block hash from the req
@@ -239,4 +266,5 @@ export default {
   getBlockTxs,
   getBlockByHeight,
   postBlockByHeights,
+  checkBlockExists,
 };
