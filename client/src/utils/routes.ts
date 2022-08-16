@@ -6,7 +6,6 @@ import SummaryPage from "../pages/SummaryPage/SummaryPage";
 // other
 import { FC } from "react";
 import KYCAddressesPage from "../pages/KYCAddressesPage/KYCAddressesPage";
-import CoinbaseTXsPage from "../pages/CoinbaseTXsPage/CoinbaseTXsPage";
 
 // interface
 interface Route {
@@ -38,13 +37,6 @@ export const routes: Array<Route> = [
     path: "/kycaddresses",
     enabled: true,
     component: KYCAddressesPage,
-  },
-  {
-    key: "coinbasetxs-route",
-    title: "Coinbase TXs",
-    path: "/coinbasetxs",
-    enabled: true,
-    component: CoinbaseTXsPage,
   },
   // {
   //   key: "txids-route",
