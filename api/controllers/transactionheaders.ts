@@ -14,7 +14,6 @@ interface inputAddress {
   value: number;
 }
 
-
 // Returns list of transactions for a given height
 // If no height passed - use the max block height from the database
 export const getTxs = async (
@@ -97,14 +96,14 @@ export const getMerkleProof = async (
 const getVinAddress = async (txid: string, vout: number) => {
   let results = [];
 
-  try{
+  try {
     let txDetail: any = await getTxDetails(txid);
     for (let idx = 0; idx < txDetail.vout.length; idx += 1) {
       if (idx === vout) {
-        let output = {'address': '', 'value': 0};
+        let output = { address: "", value: 0 };
 
-        output['address'] = txDetail.vout[idx].scriptpubkey_address;
-        output['value'] = txDetail.vout[idx].value;
+        output["address"] = txDetail.vout[idx].scriptpubkey_address;
+        output["value"] = txDetail.vout[idx].value;
 
         results.push(output);
       }
@@ -112,13 +111,12 @@ const getVinAddress = async (txid: string, vout: number) => {
     console.log(results);
     return results;
   } catch (err) {
-    let output = {'address': '', 'value': 0};
-    output.address = 'Coinbase';
+    let output = { address: "", value: 0 };
+    output.address = "Coinbase";
     results.push(output);
-    return results
+    return results;
   }
-
-}
+};
 
 // Returns the list of vout addresses and its bitcoin value
 export const getVoutAddresses = async (
@@ -131,17 +129,44 @@ export const getVoutAddresses = async (
 
   let results: Array<inputAddress> = [];
   for (let idx = 0; idx < txDetail.vin.length; idx += 1) {
-    let inputAddresses: Array<inputAddress> = await getVinAddress(txDetail.vin[idx].txid, txDetail.vin[idx].vout);
+    let inputAddresses: Array<inputAddress> = await getVinAddress(
+      txDetail.vin[idx].txid,
+      txDetail.vin[idx].vout
+    );
     results = results.concat(inputAddresses);
   }
   return res.status(200).json({
     message: results,
   });
-}
+};
+
+// Check if TX is flagged
+const getTXFlagged = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let query = `
+    SELECT
+      COUNT(txid)
+    FROM
+      bitcoin.txidaddress
+    WHERE
+      txid = '${String(req.params.id)}';
+  `;
+  console.log(query);
+  let pgResult: QueryResult<any> = await pool.query(query);
+  let flagged: any[] = pgResult.rows;
+
+  return res.status(200).json({
+    message: flagged.length > 0 ? true : false,
+  });
+};
 
 export default {
   getTxs,
   getTxDetailsByTxID,
   getMerkleProof,
-  getVoutAddresses
+  getVoutAddresses,
+  getTXFlagged,
 };

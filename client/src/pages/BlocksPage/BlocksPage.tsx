@@ -21,6 +21,7 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
   const [page, setPage] = React.useState(1);
   const [pageTXs, setPageTXs] = React.useState<Array<string>>([]);
   const [txids, setTxids] = React.useState<Array<string>>([]);
+  const [flaggedTXs, setFlaggedTXs] = React.useState<Array<string>>([]);
 
   // Set the initial block header to the maximum block height in database
   React.useEffect(() => {
@@ -62,6 +63,23 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
     }
   }, [block]);
 
+  React.useEffect(() => {
+    if (pageTXs !== undefined) {
+      (async () => {
+        const url = `http://www.localhost:5010/transactions/flaggedtxs`;
+        let res = await fetch(url, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(pageTXs),
+        });
+        let data = await res.json();
+        setFlaggedTXs([...data.message]);
+      })();
+    } else {
+      setFlaggedTXs([]);
+    }
+  }, [pageTXs]);
+
   return (
     <Grid container spacing={1}>
       <Grid item xs={2}>
@@ -97,13 +115,15 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
             {block ? "Block " + block.height : "Loading..."}
           </Typography>
         </Box>
-        <Box sx={{width: '90%', mr: 'auto', ml: 'auto'}}>
+        <Box sx={{ width: "90%", mr: "auto", ml: "auto" }}>
           <BlockHeaderInfoComponent block={block} />
         </Box>
-        <Typography variant="h5" sx={{ mb: "1rem", m: 2 }} align='center'>
+        <Typography variant="h5" sx={{ mb: "1rem", m: 2 }} align="center">
           Transactions in Block
         </Typography>
-        <Card sx={{ m: 2, width: '60%', marginRight: 'auto', marginLeft: 'auto'}}>
+        <Card
+          sx={{ m: 2, width: "60%", marginRight: "auto", marginLeft: "auto" }}
+        >
           <CardContent>
             <Pagination
               count={Math.ceil(txids.length / 15)}
@@ -113,7 +133,7 @@ const BlocksPage: React.FC<IBlocksPageProps> = (props) => {
                 setPage(value);
                 setPageTXs([...txids.slice((value - 1) * 15, value * 15)]);
               }}
-              sx={{mb: '1rem'}}
+              sx={{ mb: "1rem" }}
             />
             <BlockTxsComponent txids={pageTXs} page={page} />
           </CardContent>

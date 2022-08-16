@@ -22,6 +22,7 @@ const BlockDetailsPage: React.FC<IProps> = () => {
   const [page, setPage] = React.useState(1);
   const [pageTXs, setPageTXs] = React.useState<Array<string>>([]);
   const [txids, setTxids] = React.useState<Array<string>>([]);
+  const [flaggedTXs, setFlaggedTXs] = React.useState<Array<string>>([]);
 
   React.useEffect(() => {
     if (blockheight !== undefined) {
@@ -49,6 +50,23 @@ const BlockDetailsPage: React.FC<IProps> = () => {
       setTxids([]);
     }
   }, [block]);
+
+  React.useEffect(() => {
+    if (pageTXs !== undefined) {
+      (async () => {
+        const url = `http://www.localhost:5010/transactions/flaggedtxs`;
+        let res = await fetch(url, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(pageTXs),
+        });
+        let data = await res.json();
+        setFlaggedTXs([...data.message]);
+      })();
+    } else {
+      setFlaggedTXs([]);
+    }
+  }, [pageTXs]);
 
   return (
     <Grid container>
@@ -82,13 +100,13 @@ const BlockDetailsPage: React.FC<IProps> = () => {
             {block ? "Block " + block.height : "Loading..."}
           </Typography>
         </Box>
-        <Box sx={{width: '75%', marginRight: 'auto', marginLeft: 'auto'}}>
+        <Box sx={{ width: "75%", marginRight: "auto", marginLeft: "auto" }}>
           <BlockHeaderInfoComponent block={block} />
         </Box>
         <Typography variant="h5" sx={{ mb: "1rem" }} align="center">
           Transactions in Block
         </Typography>
-        <Card sx={{ m: 2, width: '55%', mr: 'auto', ml: 'auto'}}>
+        <Card sx={{ m: 2, width: "55%", mr: "auto", ml: "auto" }}>
           <CardContent>
             <Pagination
               count={Math.ceil(txids.length / 25)}

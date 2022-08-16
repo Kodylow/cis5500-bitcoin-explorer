@@ -7,6 +7,6 @@ router.get("/", transactionHeadersController.getTxs);
 router.get("/:id", transactionHeadersController.getTxDetailsByTxID);
 router.get("/:id/merkle-proof", transactionHeadersController.getMerkleProof);
 router.get("/vouts/:id", transactionHeadersController.getVoutAddresses);
-
+router.get("/flagged/:id", transactionHeadersController.getTXFlagged);
 
 export = router;

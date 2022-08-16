@@ -44,6 +44,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
   );
 
   const [tree, setTree] = React.useState<any>(undefined);
+  const [flagged, setFlagged] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const buildMerkleTree = (m: MerkleProof) => {
@@ -115,6 +116,25 @@ const TXDetailsPage: React.FC<IProps> = () => {
     }
   }, [txid]);
 
+  React.useEffect(() => {
+    if (txid !== undefined) {
+      (async () => {
+        const url = `http://www.localhost:5010/transactions/flagged/${txid}`;
+        let res = await fetch(url);
+        let data = await res.json();
+
+        if (data.message > 0) {
+          alert("TX is flagged as having KYCed!!!!");
+          setFlagged(true);
+        } else {
+          setFlagged(false);
+        }
+      })();
+    } else {
+      setFlagged(false);
+    }
+  }, [txid]);
+
   return (
     <div style={{ paddingBottom: "2rem" }}>
       <Grid>
@@ -136,7 +156,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
             src={transaction}
           />
           <Typography variant="h4" alignSelf={"center"}>
-            Transaction Details
+            {flagged ? "KYCed Transaction Details" : "Transaction Details"}
           </Typography>
         </Grid>
 
