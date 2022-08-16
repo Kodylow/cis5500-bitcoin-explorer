@@ -55,17 +55,17 @@ const SearchComponent = (props: Props) => {
       }
     } else if (search.length === 64) {
       // TXID or Blockhash
-      try {
-        const blockheader = await (
-          await fetch(`http://localhost:5010/blockheaders/hash/${search}`)
-        ).json();
-        if (blockheader.height) {
-          navigate(`/block/${blockheader.height}`);
-        } else {
+      const blockheader = await (
+        await fetch(`http://localhost:5010/blockheaders/${search}/check`)
+      ).json();
+      if (blockheader.message.length > 0) {
+        navigate(`/block/${blockheader.message[0].height}`);
+      } else {
+        try {
           navigate(`/tx/${search}`);
+        } catch {
+          alert("Invalid TXID");
         }
-      } catch {
-        alert("Invalid TXID or Blockhash");
       }
     } else {
       alert("Invalid search");
