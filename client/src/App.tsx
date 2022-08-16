@@ -4,7 +4,6 @@ import Layout from "./components/Layout/Layout";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import BlocksPage from "./pages/BlocksPage/BlocksPage";
 import KYCAddressesPage from "./pages/KYCAddressesPage/KYCAddressesPage";
-import CoinbaseTXsPage from "./pages/CoinbaseTXsPage/CoinbaseTXsPage";
 import TXDetailsPage from "./pages/DetailsPage/TXDetailsPage";
 import AddressDetailsPage from "./pages/DetailsPage/AddressDetailsPage";
 import { CssBaseline } from "@mui/material";
@@ -28,7 +27,6 @@ const App: React.FC<IAppProps> = (props) => {
             <Route index element={<SummaryPage />} />
             <Route path="/blocks" element={<BlocksPage />} />
             <Route path="/kycaddresses" element={<KYCAddressesPage />} />
-            <Route path="/coinbasetxs" element={<CoinbaseTXsPage />} />
             <Route path="/block/:blockheight" element={<BlockDetailsPage />} />
             <Route path="/tx/:txid" element={<TXDetailsPage />} />
             <Route path="/address/:address" element={<AddressDetailsPage />} />
