@@ -41,7 +41,6 @@ const InputOutputComponent: React.FC<IProps> = ({ tx, vins }) => {
         let data = await res.json();
 
         if (data.message.length > 0) {
-          alert("TX contains KYCed addresses!!!!");
           setFlagged(data.message);
         } else {
           setFlagged(data.message);
