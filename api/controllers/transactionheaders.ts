@@ -201,10 +201,16 @@ export const postFlaggedTXs = async (
     VALUES ${arr};
   `;
   console.log(query);
-  await pool.query(query);
-  return res.status(200).json({
-    message: "Success",
-  });
+  try {
+    let pgResult: QueryResult<any> = await pool.query(query);
+    return res.status(200).json({
+      message: "Success",
+    });
+  } catch {
+    return res.status(200).json({
+      message: "No Insert",
+    });
+  }
 };
 
 // Get all flagged TXs
