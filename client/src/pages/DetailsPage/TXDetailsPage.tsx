@@ -22,23 +22,15 @@ import CopyToClipboardButton from "../../components/CopyToClipboardButton";
 
 export interface IProps {}
 
-interface MerkleProof {
-  blockheight: number;
-  merkle: Array<string>;
-  pos: number;
-}
-
-function hash256(data: string) {
-  let hash = sha256(data);
-  return sha256(hash);
-}
-
 const TXDetailsPage: React.FC<IProps> = () => {
   let { txid } = useParams();
   const [tx, setTx] = React.useState<Transaction | undefined>(undefined);
   const [merkleRoot, setMerkleRoot] = React.useState<String | undefined>(
     undefined
   );
+  const [calcMerkleRoot, setCalcMerkleRoot] = React.useState<
+    String | undefined
+  >(undefined);
   const [vins, setVins] = React.useState<Array<VinAddress> | undefined>(
     undefined
   );
@@ -47,43 +39,6 @@ const TXDetailsPage: React.FC<IProps> = () => {
   const [flagged, setFlagged] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const buildMerkleTree = (m: MerkleProof) => {
-      let h = txid;
-      let data = { name: h, children: {} };
-      let index = m.pos;
-      let inner_node;
-      for (const i of m.merkle) {
-        let name_i = i.slice(0, 3) + ".." + i.slice(i.length - 3);
-        if (index & 1) {
-          inner_node = i + h;
-          h = hash256(inner_node).toString();
-          data = {
-            name: "",
-            children: [
-              data,
-              {
-                name: name_i,
-              },
-            ],
-          };
-        } else {
-          inner_node = h + i;
-          h = hash256(inner_node).toString();
-          data = {
-            name: "",
-            children: [
-              {
-                name: name_i,
-              },
-              data,
-            ],
-          };
-        }
-        index >>= 1;
-      }
-      setTree(data);
-    };
-
     if (txid !== undefined) {
       (async () => {
         let url = `http://localhost:5010/transactions/${txid}`;
@@ -100,7 +55,9 @@ const TXDetailsPage: React.FC<IProps> = () => {
         url = `http://localhost:5010/transactions/${txid}/merkle-proof`;
         res = await fetch(url);
         data = await res.json();
-        buildMerkleTree(data.message);
+        data = JSON.parse(data.message);
+        setCalcMerkleRoot(data.calculated_merkle_root);
+        setTree(data.tree);
       })();
     }
   }, [txid]);
@@ -273,7 +230,7 @@ const TXDetailsPage: React.FC<IProps> = () => {
           )}
         </Box>
 
-        {merkleRoot ? (
+        {merkleRoot && calcMerkleRoot ? (
           <React.Fragment>
             <Typography sx={{ m: 2 }} align="center" variant="h4">
               Merkle Proof
@@ -281,6 +238,9 @@ const TXDetailsPage: React.FC<IProps> = () => {
             <Card sx={{ m: 2, width: "90%", ml: "auto", mr: "auto" }}>
               <Typography sx={{ m: 2 }} variant="body1">
                 Merkle Root: {merkleRoot}
+              </Typography>
+              <Typography sx={{ m: 2 }} variant="body1">
+                Calculated Merkle Root: {calcMerkleRoot}
               </Typography>
             </Card>
           </React.Fragment>
