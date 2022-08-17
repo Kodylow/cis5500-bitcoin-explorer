@@ -106,20 +106,26 @@ const getAddressFlagged = async (
   res: Response,
   next: NextFunction
 ) => {
-  let query = `
+  try {
+    let query = `
     SELECT
       COUNT(address)
     FROM
       bitcoin.txidaddress
     WHERE
       address = '${String(req.params.address)}';
-  `;
-  let pgResult: QueryResult<any> = await pool.query(query);
-  let flagged: any[] = pgResult.rows;
-  console.log("flagged", flagged);
-  return res.status(200).json({
-    message: flagged[0]["count"] !== "0" ? true : false,
-  });
+    `;
+    let pgResult: QueryResult<any> = await pool.query(query);
+    let flagged: any[] = pgResult.rows;
+    return res.status(200).json({
+      message: flagged[0]["count"] !== "0" ? true : false,
+    });
+  } catch (err) {
+    return res.status(200).json({
+      message: false,
+    });
+  }
+
 };
 
 // Check if any address is flagged
@@ -128,21 +134,20 @@ const postAddressesFlagged = async (
   res: Response,
   next: NextFunction
 ) => {
-  let addresses: string[] = req.body;
-  console.log("got addresses", addresses);
-  let query = `
-    SELECT DISTINCT
-      address
-    FROM
-      bitcoin.txidaddress
-    WHERE
-      address in ('${String(addresses.join("','"))}');
-  `;
-  let pgResult: QueryResult<any> = await pool.query(query);
   try {
+    let addresses: string[] = req.body;
+    let query = `
+      SELECT DISTINCT
+        address
+      FROM
+        bitcoin.txidaddress
+      WHERE
+        address in ('${String(addresses.join("','"))}');
+    `;
+    let pgResult: QueryResult<any> = await pool.query(query);
+
     let flagged: any[] = pgResult.rows;
     flagged = flagged.map((row) => row.address as string);
-    console.log("flagged", flagged);
     return res.status(200).json({
       message: flagged,
     });

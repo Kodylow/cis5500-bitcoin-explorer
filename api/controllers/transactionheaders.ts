@@ -130,7 +130,6 @@ const getVinAddress = async (txid: string, vout: number) => {
         results.push(output);
       }
     }
-    console.log(results);
     return results;
   } catch (err) {
     let output = { address: "", value: 0 };
@@ -168,19 +167,26 @@ const getTXFlagged = async (
   res: Response,
   next: NextFunction
 ) => {
-  let query = `
-    SELECT
-      COUNT(txid)
-    FROM
-      bitcoin.txidaddress
-    WHERE
-      txid = '${String(req.params.id)}';
-  `;
-  let pgResult: QueryResult<any> = await pool.query(query);
-  let flagged: any[] = pgResult.rows;
-  return res.status(200).json({
-    message: flagged[0]["count"] !== "0" ? true : false,
-  });
+  try {
+      let query = `
+      SELECT
+        COUNT(txid)
+      FROM
+        bitcoin.txidaddress
+      WHERE
+        txid = '${String(req.params.id)}';
+    `;
+    let pgResult: QueryResult<any> = await pool.query(query);
+    let flagged: any[] = pgResult.rows;
+    return res.status(200).json({
+      message: flagged[0]["count"] !== "0" ? true : false,
+    });
+  } catch (err) {
+    return res.status(200).json({
+      message: [] as string[],
+    });
+  }
+
 };
 
 // Post new flagged TXS to the database
@@ -190,7 +196,6 @@ export const postFlaggedTXs = async (
   next: NextFunction
 ) => {
   let data = req.body;
-  console.log("data", data);
   let arr = data.map(
     (entry: { txid: string; address: string }) =>
       `('${entry.txid}', '${entry.address}')`
@@ -200,7 +205,6 @@ export const postFlaggedTXs = async (
     INSERT INTO bitcoin.txidaddress (txid, address)
     VALUES ${arr};
   `;
-  console.log(query);
   try {
     let pgResult: QueryResult<any> = await pool.query(query);
     return res.status(200).json({
