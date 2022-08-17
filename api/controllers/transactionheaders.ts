@@ -4,6 +4,7 @@ import pool from "../database/db";
 import { QueryResult } from "pg";
 import isValidHeight from "../utils/isValidHeight";
 import getTxDetails from "../utils/getTxDetails";
+import { isJSDocReturnTag } from "typescript";
 
 interface txids {
   txid: String[];
@@ -87,7 +88,6 @@ export const getMerkleProof = async (
   let proof: any = await axios.get(
     `https://blockstream.info/api/tx/${id}/merkle-proof`
   );
-  console.log(JSON.stringify([id, proof.data.merkle, proof.data.pos]));
   let runPy = new Promise(function (success, nosuccess) {
     const { spawn } = require("child_process");
     const pyprog = spawn("python3", [
@@ -106,7 +106,6 @@ export const getMerkleProof = async (
 
   runPy
     .then((data: any) => {
-      console.log("data here", data.toString("utf8"));
       return res.status(200).json({
         message: data.toString("utf8"),
       });
@@ -184,10 +183,59 @@ const getTXFlagged = async (
   });
 };
 
+// Post new flagged TXS to the database
+export const postFlaggedTXs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let data = req.body;
+  console.log("data", data);
+  let arr = data.map(
+    (entry: { txid: string; address: string }) =>
+      `('${entry.txid}', '${entry.address}')`
+  );
+
+  let query = `
+    INSERT INTO bitcoin.txidaddress (txid, address)
+    VALUES ${arr};
+  `;
+  console.log(query);
+  await pool.query(query);
+  return res.status(200).json({
+    message: "Success",
+  });
+};
+
+// Get all flagged TXs
+export const checkFlaggedTXs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let data = req.body.join("','");
+
+  let query = `
+    SELECT DISTINCT
+      txid
+    FROM
+      bitcoin.txidaddress
+    WHERE
+      txid IN ('${data}');
+  `;
+  let pgResult: QueryResult<any> = await pool.query(query);
+  let flagged: any[] = pgResult.rows;
+  return res.status(200).json({
+    message: flagged,
+  });
+};
+
 export default {
   getTxs,
   getTxDetailsByTxID,
   getMerkleProof,
   getVoutAddresses,
   getTXFlagged,
+  postFlaggedTXs,
+  checkFlaggedTXs,
 };

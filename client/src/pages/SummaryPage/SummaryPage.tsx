@@ -211,12 +211,12 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
       <Grid
         container
         sx={{
-        mt: "3rem",
-        display: "flex",
-        justifyContent: "flex-start",
-        mr: "auto",
-        ml: "auto",
-      }}
+          mt: "3rem",
+          display: "flex",
+          justifyContent: "flex-start",
+          mr: "auto",
+          ml: "auto",
+        }}
         width="80%"
         spacing={0}
       >
@@ -295,7 +295,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
         alignItems="center"
       >
         <React.Fragment>
-          <Typography variant="h5">Total Transactions by Month</Typography>
+          <Typography variant="h5">Transactions/Month</Typography>
           <TimeSeriesChart
             timeData={currTxsData}
             yAxisLabel="Total Transactions"
@@ -303,7 +303,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
         </React.Fragment>
         <React.Fragment>
           <Typography variant="h5" sx={{ mt: "1.5rem" }}>
-            Difficulty by Month (in Trillion)
+            Proof of Work Difficulty (in Trillions)
           </Typography>
           <TimeSeriesChart
             timeData={currDifficultyData}
@@ -312,7 +312,7 @@ const DashboardPage: React.FC<IDashboardPageProps> = () => {
         </React.Fragment>
         <React.Fragment>
           <Typography variant="h5" sx={{ mt: "1.5rem" }}>
-            Total BTC Mined by Year
+            Total BTC Mined Over Time
           </Typography>
           <TimeSeriesChart
             timeData={currBTCMinedData}

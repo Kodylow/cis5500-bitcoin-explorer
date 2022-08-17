@@ -6,15 +6,14 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import React from 'react'
+import React from "react";
 import AddressesListComponent from "./AddressesListComponent";
 import AddressTxsComponent from "./AddressTxsComponent";
 import AddressInfoComponent from "./AddressInfoComponent";
 import { Address } from "../../types/BitcoinTypes";
 import CopyToClipboardButton from "../../components/CopyToClipboardButton";
 
-
-type Props = {}
+type Props = {};
 export interface IAddressesPageProps {}
 
 const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
@@ -48,38 +47,45 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
     }
   }, [addr]);
 
-
   return (
     <Grid container spacing={1}>
-      <Grid item xs={3} sx={{wordWrap: 'break-word'}}>
+      <Grid item xs={3} sx={{ wordWrap: "break-word" }}>
         <AddressesListComponent address={addr} setAddress={setAddress} />
       </Grid>
       <Grid item xs={9} sx={{ p: 2 }}>
         <Grid
           sx={{
-            marginLeft: '1.5rem',
-            marginTop: '1.5rem',
-            marginBottom: '1.25rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexWrap: 'wrap'
+            marginLeft: "1.5rem",
+            marginTop: "1.5rem",
+            marginBottom: "1.25rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexWrap: "wrap",
           }}
         >
-          <Typography variant="h5" sx={{wordWrap: 'break-word'}}>
+          <Typography variant="h5" sx={{ wordWrap: "break-word" }}>
             {addr ? addr.address : "Loading..."}
           </Typography>
-          <Box style={{display: 'inline-block', marginLeft: '.5rem'}}>
-              <CopyToClipboardButton copiedText={addr ? addr.address : ''}/>
+          <Box style={{ display: "inline-block", marginLeft: ".5rem" }}>
+            <CopyToClipboardButton copiedText={addr ? addr.address : ""} />
           </Box>
         </Grid>
-        <Box sx={{width: '90%', mr: 'auto', ml: 'auto'}}>
+        <Box sx={{ width: "90%", mr: "auto", ml: "auto" }}>
           <AddressInfoComponent address={addr} />
         </Box>
         <Typography variant="h5" sx={{ mb: "1rem" }} align="center">
           Address Transactions
         </Typography>
-        <Card sx={{ m: 2, marginTop: '1.75rem', width: '75%', mr: 'auto', ml: 'auto' }}>
+        <Card
+          sx={{
+            m: 2,
+            marginTop: "1.75rem",
+            width: "75%",
+            mr: "auto",
+            ml: "auto",
+          }}
+        >
           <CardContent>
             <Pagination
               count={Math.ceil(txids.length / 25)}
@@ -90,12 +96,12 @@ const KYCAddressesPage: React.FC<IAddressesPageProps> = (props: Props) => {
                 setPageTXs([...txids.slice((value - 1) * 25, value * 25)]);
               }}
             />
-            <AddressTxsComponent txids={pageTXs} page={page} />
+            <AddressTxsComponent txids={pageTXs} page={page} flagged={true} />
           </CardContent>
         </Card>
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
-export default KYCAddressesPage
+export default KYCAddressesPage;

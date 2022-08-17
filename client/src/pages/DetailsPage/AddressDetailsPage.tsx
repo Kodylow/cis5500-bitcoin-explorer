@@ -43,7 +43,6 @@ const AddressDetailsPage: React.FC<IProps> = () => {
         const url = `https://blockstream.info/api/address/${address}/txs`;
         let res = await fetch(url);
         let data = await res.json();
-        console.log(data.message);
         setTXs(data);
       })();
     }
@@ -57,7 +56,6 @@ const AddressDetailsPage: React.FC<IProps> = () => {
         let data = await res.json();
 
         if (data.message > 0) {
-          alert("Address is flagged as having KYCed!!!!");
           setFlagged(true);
         } else {
           setFlagged(false);
@@ -67,6 +65,22 @@ const AddressDetailsPage: React.FC<IProps> = () => {
       setFlagged(false);
     }
   }, [address]);
+
+  React.useEffect(() => {
+    if (flagged && txs !== undefined && address !== undefined) {
+      (async () => {
+        const data = txs.map((tx) => ({ txid: tx.txid, address: address }));
+        const url = `http://www.localhost:5010/transactions/newflagged`;
+        let res = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      })();
+    }
+  }, [flagged, txs, address]);
 
   return (
     <div>
@@ -90,7 +104,11 @@ const AddressDetailsPage: React.FC<IProps> = () => {
                 justifyContent: "center",
               }}
             >
-              <Typography variant="subtitle1" align="center">
+              <Typography
+                variant="subtitle1"
+                align="center"
+                sx={{ color: flagged ? "red" : "white" }}
+              >
                 {addr["address"]}
               </Typography>
               <Box sx={{ marginLeft: ".75rem" }}>
@@ -186,7 +204,7 @@ const AddressDetailsPage: React.FC<IProps> = () => {
               sx={{ m: 2, width: "55%", mr: "auto", ml: "auto", mb: "3rem" }}
             >
               <CardContent>
-                <AddressTxsComponent txs={txs} />
+                <AddressTxsComponent txs={txs} flagged={flagged} />
               </CardContent>
             </Card>
           </>

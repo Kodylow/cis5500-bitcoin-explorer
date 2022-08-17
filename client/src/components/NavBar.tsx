@@ -32,6 +32,9 @@ const Navbar: FC = (): ReactElement => {
         width: "100%",
         height: "auto",
         backgroundColor: "#1d1f31",
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
       }}
     >
       <Container maxWidth="xl">

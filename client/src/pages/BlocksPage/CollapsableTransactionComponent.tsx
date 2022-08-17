@@ -7,24 +7,24 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link } from "react-router-dom";
 import { Transaction } from "../../types/BitcoinTypes";
 import TransactionHeaderInfoComponent from "./TransactionHeaderInfoComponent";
-import { makeStyles, createStyles } from '@mui/styles';
+import { makeStyles, createStyles } from "@mui/styles";
 
 export interface IProps {
   index: number;
   txid: string;
+  flagged: boolean;
 }
 
 const useStyles = makeStyles(() =>
   createStyles({
-    'accordion-border-radius': {
+    "accordion-border-radius": {
       borderBottomLeftRadius: "0 !important",
       borderBottomRightRadius: "0 !important",
-    }
-  }),
+    },
+  })
 );
 
-
-const CollapsableTransaction: React.FC<IProps> = ({ index, txid }) => {
+const CollapsableTransaction: React.FC<IProps> = ({ index, txid, flagged }) => {
   const [tx, setTx] = React.useState<Transaction | undefined>();
   const classes = useStyles();
 
@@ -39,13 +39,17 @@ const CollapsableTransaction: React.FC<IProps> = ({ index, txid }) => {
     }
   };
 
-
   return (
-    <div>
+    <td>
       <Accordion
         onClick={() => handleClick()}
-        className={classes['accordion-border-radius']}
-        sx={{borderBottomLeftRadius: 0, borderBottomRightRadius: 0, padding: '.25rem', outline: 'none'}}
+        className={classes["accordion-border-radius"]}
+        sx={{
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
+          padding: ".25rem",
+          outline: "none",
+        }}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon onClick={() => handleClick()} />}
@@ -55,7 +59,10 @@ const CollapsableTransaction: React.FC<IProps> = ({ index, txid }) => {
           <Typography>
             <Link
               to={`/tx/${txid}`}
-              style={{ textDecoration: "none", color: "#00ccff" }}
+              style={{
+                textDecoration: "none",
+                color: flagged ? "red" : "rgb(0, 204, 255)",
+              }}
             >
               {txid}
             </Link>
@@ -69,7 +76,7 @@ const CollapsableTransaction: React.FC<IProps> = ({ index, txid }) => {
           )}
         </AccordionDetails>
       </Accordion>
-    </div>
+    </td>
   );
 };
 

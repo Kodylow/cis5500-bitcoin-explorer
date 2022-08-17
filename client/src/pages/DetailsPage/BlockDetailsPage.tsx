@@ -20,9 +20,9 @@ const BlockDetailsPage: React.FC<IProps> = () => {
   let { blockheight } = useParams();
   const [block, setBlock] = React.useState<BlockHeader | undefined>(undefined);
   const [page, setPage] = React.useState(1);
-  const [pageTXs, setPageTXs] = React.useState<Array<string>>([]);
-  const [txids, setTxids] = React.useState<Array<string>>([]);
-  const [flaggedTXs, setFlaggedTXs] = React.useState<Array<string>>([]);
+  const [pageTXs, setPageTXs] = React.useState<string[]>([]);
+  const [txids, setTxids] = React.useState<string[]>([]);
+  const [flaggedTXs, setFlaggedTXs] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     if (blockheight !== undefined) {

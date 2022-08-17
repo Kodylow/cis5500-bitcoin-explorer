@@ -79,7 +79,6 @@ const TXDetailsPage: React.FC<IProps> = () => {
         const url = `http://www.localhost:5010/transactions/flagged/${txid}`;
         let res = await fetch(url);
         let data = await res.json();
-        console.log(data);
         if (data.message) {
           setFlagged(true);
         } else {

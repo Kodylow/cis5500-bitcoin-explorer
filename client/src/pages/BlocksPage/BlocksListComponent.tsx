@@ -28,11 +28,15 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
   const getMoreBlockHeaders = async () => {
     if (currHeight) {
       const res = await (
-        await fetch(`http://www.localhost:5010/blockheaders?hstart=${currHeight - moreBlocks}&hend=${currHeight - 1}`)
+        await fetch(
+          `http://www.localhost:5010/blockheaders?hstart=${
+            currHeight - moreBlocks
+          }&hend=${currHeight - 1}`
+        )
       ).json();
       setBlockheaders([...(blockheaders || []), ...res.message]);
     }
-  }
+  };
 
   React.useEffect(() => {
     (async () => {
@@ -40,13 +44,11 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
         await fetch("http://www.localhost:5010/blockheaders/")
       ).json();
       setBlockheaders([...res.message]);
-
     })();
   }, []);
 
   React.useEffect(() => {
     if (blockheaders) {
-      console.log(blockheaders[blockheaders.length - 1].height);
       let minHeight = blockheaders[blockheaders.length - 1].height;
       setCurrHeight(minHeight);
     }
@@ -109,11 +111,11 @@ const BlocksListComponent: React.FC<IProps> = ({ block, setBlock }) => {
           <Button
             variant="outlined"
             sx={{
-              display: 'flex',
-              width: '50%',
-              marginRight: 'auto',
-              marginLeft: 'auto',
-              marginBottom: '1rem'
+              display: "flex",
+              width: "50%",
+              marginRight: "auto",
+              marginLeft: "auto",
+              marginBottom: "1rem",
             }}
             onClick={getMoreBlockHeaders}
           >

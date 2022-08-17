@@ -8,5 +8,6 @@ router.get("/:address/txids", addressController.getTxids);
 router.get("/:address", addressController.getAddress);
 router.get("/:address/txs", addressController.getAddressTxs);
 router.get("/flagged/:address", addressController.getAddressFlagged);
+router.post("/flaggedaddrs", addressController.postAddressesFlagged);
 
 export = router;

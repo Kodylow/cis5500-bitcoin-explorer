@@ -122,6 +122,37 @@ const getAddressFlagged = async (
   });
 };
 
+// Check if any address is flagged
+const postAddressesFlagged = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let addresses: string[] = req.body;
+  console.log("got addresses", addresses);
+  let query = `
+    SELECT DISTINCT
+      address
+    FROM
+      bitcoin.txidaddress
+    WHERE
+      address in ('${String(addresses.join("','"))}');
+  `;
+  let pgResult: QueryResult<any> = await pool.query(query);
+  try {
+    let flagged: any[] = pgResult.rows;
+    flagged = flagged.map((row) => row.address as string);
+    console.log("flagged", flagged);
+    return res.status(200).json({
+      message: flagged,
+    });
+  } catch (error) {
+    return res.status(200).json({
+      message: [] as string[],
+    });
+  }
+};
+
 export default {
   getAddress,
   getAddressTxs,
@@ -129,4 +160,5 @@ export default {
   getFirstAddress,
   getTxids,
   getAddressFlagged,
+  postAddressesFlagged,
 };

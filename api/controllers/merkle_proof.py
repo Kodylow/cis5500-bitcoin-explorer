@@ -19,7 +19,7 @@ def hash_merkle_root(d):
     """Return calculated merkle root."""
     h = hash_decode(tx_hash)
     merkle_branch_bytes = [hash_decode(item) for item in merkle_branch]
-    data = {'name': tx_hash, 'children': []}
+    data = {'name': tx_hash, 'children': [], 'key': tx_hash}
     for item in merkle_branch_bytes:
         if (index & 1): 
           inner_node = (item + h)
@@ -38,9 +38,11 @@ def hash_merkle_root(d):
           h = sha256d(inner_node)
           data = {
               'name': h[:3].hex() + '...' + h[-3:].hex(),
+              'key': h[:3].hex() + '...' + h[-3:].hex(),
               'children': [
                 {
                   'name': item[:3].hex() + '...' + item[-3:].hex(),
+                  'key': item[:3].hex() + '...' + item[-3:].hex(),
                 },
                 data,
               ],
