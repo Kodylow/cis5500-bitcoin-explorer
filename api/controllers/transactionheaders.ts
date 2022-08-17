@@ -87,10 +87,33 @@ export const getMerkleProof = async (
   let proof: any = await axios.get(
     `https://blockstream.info/api/tx/${id}/merkle-proof`
   );
+  console.log(JSON.stringify([id, proof.data.merkle, proof.data.pos]));
+  let runPy = new Promise(function (success, nosuccess) {
+    const { spawn } = require("child_process");
+    const pyprog = spawn("python3", [
+      __dirname + "/merkle_proof.py",
+      JSON.stringify([id, proof.data.merkle, proof.data.pos]),
+    ]);
 
-  return res.status(200).json({
-    message: proof.data,
+    pyprog.stdout.on("data", function (data: any) {
+      success(data);
+    });
+
+    pyprog.stderr.on("data", (data: any) => {
+      nosuccess(data);
+    });
   });
+
+  runPy
+    .then((data: any) => {
+      console.log("data here", data.toString("utf8"));
+      return res.status(200).json({
+        message: data.toString("utf8"),
+      });
+    })
+    .catch((err: any) => {
+      console.log("err", err.toString("utf8"));
+    });
 };
 
 const getVinAddress = async (txid: string, vout: number) => {
